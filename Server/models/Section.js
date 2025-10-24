@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 exports.sectionSchema = new mongoose.Schema({
 
-    name:{
+    SectionName:{
         type:String
     },
     subSection:[
