@@ -4,10 +4,11 @@ const Profile = require('../models/Profile');
 const otpGenerator = require('otp-generator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mailSender = require('../utils/mailSender');
 
 
 //send OTP
-exports.sentOTP = async (req, res) => {
+exports.sendOTP = async (req, res) => {
     
     try {
         const {email} = req.body;
@@ -238,3 +239,70 @@ exports.login = async (req,res) => {
 }
 
 
+//change Password
+exports.changePassword = async (req, res) => {
+    try {
+        //get data from req body
+        const {email} = req.body;
+
+        if(!password || !confirmPassword) {
+            return res.status(403).json({
+                success:false,
+                message:'All fields are required.'
+            })
+        }
+
+        if(password !== confirmPassword) {
+            return res.status(400).json({
+                success:false,
+                message:'Passwords do not match, please enter same password in both fields.'
+            })
+        }
+
+        //get oldPassword, newPassword, confirmPassword
+        const user = User.findOne({email});
+        if(!user) {
+            return res.status(410).json({
+                success:false,
+                message:'User is not registered, please signup first.'
+            })
+        }
+
+        const newPassword = password;
+        const oldPassword = user.password;
+
+        //validation
+        if(newPassword === oldPassword) {
+            return res.status(400).json({
+                success:false,
+                message:'You have entered the existed password, please enter different new password.'
+            })
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        //update password in DB
+        await user.findOneAndUpdate(
+            email,
+            {password:hashedPassword},
+            {new:true}
+        )
+
+        //send mail Password Updated
+        await mailSender(email, "Password change update.", `<p>Password has been changed successfully.</p>
+                                                            <p>Now you can login with new password.</p>`);
+
+        //return response
+        return res.status(200).json({
+            success:true,
+            message:'Password changed successfully.'
+        })
+
+    } catch (err) {
+        console.error('Password change failed.', err);
+        return res.status(500).json({
+            success:false,
+            message:'Something went wrong, please try again.'
+        })
+    }
+}
