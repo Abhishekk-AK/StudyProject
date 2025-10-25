@@ -51,3 +51,60 @@ exports.showAllCategorys = async (req, res) => {
         })
     }
 }
+
+
+exports.categoryPageDetails = async (req, res) => {
+    try {
+        const {categoryId} = req.body;
+
+        //get all courses for the specified category
+        const selectedCategory = await Category.findById(categoryId).populate("courses");
+
+        console.log(selectedCategory);
+
+        if(!selectedCategory) {
+            return res.status(404).json({
+                success:false,
+                message:'Category not found.'
+            })
+        }
+
+        //if ther is no courses in the category
+        if(selectedCategory.courses.length === 0) {
+            console.log('No courses for this category.');
+
+            return res.status(404).json({
+                success:false,
+                message:'No courses found for the selected category.'
+            })
+        }
+
+        //get courses for different category
+        const differentCategories = await Category.find({
+                                                        _id: {$ne: categoryId}
+                                                    })
+                                                    .populate("courses")
+
+        //top selling courses in categories
+        const allCategories = await Category.find().populate('courses');
+        const allCourses = allCategories.flatMap((category) => category.courses);
+        const mostSellingCourses = allCourses
+                                    .sort((a,b) => b.sold-a.sold)
+                                    .slice(0,10)
+
+        //return response
+        return res.status(200).json({
+            selectedCategory: selectedCategory,
+            differentCategories: differentCategories,
+            mostSellingCourses: mostSellingCourses,
+            success:true,
+            message:'Category detail page working successfully.'
+        })
+    } catch (err) {
+        return res.status(500).json({
+            success:false,
+            message:'Somethin went wong while fetching category details.',
+            error:err.message
+        })
+    }
+}
