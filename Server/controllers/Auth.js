@@ -16,7 +16,7 @@ exports.sendOTP = async (req, res) => {
         //check if user already exist
         const checkUserPresent = await User.findOne({email});
 
-        //if user exist, reurn response
+        //if user exist, return response
         if(checkUserPresent) {
             return res.status(401).json({
                 success:false,
@@ -81,12 +81,11 @@ exports.signup = async (req, res) => {
             password,
             confirmPassword,
             accountType,
-            contactNumber,
             otp
         } = req.body;
 
         //validate data
-        if(!firstName || !lastName || !email || !password || !confirmPassword || otp) {
+        if(!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
             return res.status(403).json({
                 success:false,
                 message:'All fields are required.'
@@ -111,8 +110,8 @@ exports.signup = async (req, res) => {
         }
 
         //find most recent OTP
-        const recentOTP = (await OTP.find({email})).sort({createdAt: -1}).limit(1);
-        console.log(recentOTP);
+        const recentOTP = await OTP.find({email}).sort({createdAt: -1}).limit(1);
+        console.log('otp', recentOTP);
 
         //validate OTP
         if(recentOTP.length === 0) {
@@ -122,7 +121,7 @@ exports.signup = async (req, res) => {
                 message:'OTP not found.'
             })
 
-        } else if (otp !== recentOTP.otp) {
+        } else if (otp !== recentOTP[0].otp) {
             //invalid OTP
             return res.status(400).json({
                 success:false,
@@ -139,18 +138,17 @@ exports.signup = async (req, res) => {
             gender:null,
             dateOfBirth:null,
             about:null,
-            constactNumber:null
+            contactNumber:null
         })
 
         const user = await User.create({
             firstName,
             lastName,
             email,
-            contactNumber,
             password:hashedPassword,
             accountType,
             additionalDetails:profileDetails,
-            image:`https://dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
+            image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`
         })
 
         //return response
@@ -184,7 +182,7 @@ exports.login = async (req,res) => {
         }
 
         //check registered user
-        const user = User.findOne({email});
+        let user = await User.findOne({email}).lean();
         if(!user) {
             return res.status(401).json({
                 success:false,
@@ -203,7 +201,7 @@ exports.login = async (req,res) => {
             
             const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, {
                 expiresIn:'2h'
-            })
+            });
 
             user.token = token;
             user.password = undefined;
@@ -243,7 +241,7 @@ exports.login = async (req,res) => {
 exports.changePassword = async (req, res) => {
     try {
         //get data from req body
-        const {email} = req.body;
+        const {email, password, confirmPassword} = req.body;
 
         if(!password || !confirmPassword) {
             return res.status(403).json({
@@ -260,7 +258,7 @@ exports.changePassword = async (req, res) => {
         }
 
         //get oldPassword, newPassword, confirmPassword
-        const user = User.findOne({email});
+        const user = await User.findOne({email});
         if(!user) {
             return res.status(410).json({
                 success:false,
@@ -272,7 +270,7 @@ exports.changePassword = async (req, res) => {
         const oldPassword = user.password;
 
         //validation
-        if(newPassword === oldPassword) {
+        if(await bcrypt.compare(newPassword, oldPassword)) {
             return res.status(400).json({
                 success:false,
                 message:'You have entered the existed password, please enter different new password.'
@@ -282,8 +280,8 @@ exports.changePassword = async (req, res) => {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         //update password in DB
-        await user.findOneAndUpdate(
-            email,
+        await User.findOneAndUpdate(
+            {email},
             {password:hashedPassword},
             {new:true}
         )

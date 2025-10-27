@@ -56,6 +56,7 @@ exports.getAllUserDetails = async (req, res) => {
         const userDetails = await User.findById(id).populate("additionalDetails");
 
         return res.status(200).json({
+            userDetails:userDetails,
             success:true,
             message:'All user details fetched successfully.'
         })
@@ -75,7 +76,7 @@ exports.deleteAccount = async (req, res) => {
     try {
         //get id
         const id = req.user.id;
-
+console.log(id);
         //validation
         const userDetails = await User.findById(id);
         if(!userDetails) {

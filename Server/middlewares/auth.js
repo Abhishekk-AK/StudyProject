@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 //auth
-exports.auth = async (req, res) => {
+exports.auth = async (req, res, next) => {
     try {
         //extract token
         const token = req.cookies.token || req.body.token 
@@ -61,7 +61,7 @@ exports.isStudent = async (req, res) => {
 
 
 //isInstructor
-exports.isInstructor = async (req, res) => {
+exports.isInstructor = async (req, res, next) => {
     try {
         if(req.user.accountType !== "Instructor") {
             return res.status(401).json({
@@ -82,7 +82,7 @@ exports.isInstructor = async (req, res) => {
 
 
 //isAdmin
-exports.isAdmin = async (req, res) => {
+exports.isAdmin = async (req, res, next) => {
     try {
         if(req.user.accountType !== "Admin") {
             return res.status(401).json({

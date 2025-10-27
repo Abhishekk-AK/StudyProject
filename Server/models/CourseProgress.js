@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-exports.courseProSchema = new mongoose.Schema({
+const courseProSchema = new mongoose.Schema({
 
     courseID:{
         type:mongoose.Schema.Types.ObjectId,
@@ -13,3 +13,5 @@ exports.courseProSchema = new mongoose.Schema({
         }
     ]
 })
+
+module.exports = mongoose.model('CourseProgress', courseProSchema);

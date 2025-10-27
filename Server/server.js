@@ -10,7 +10,7 @@ const database = require('./config/database');
 const razorpay = require('./config/razorpay')
 
 const userRoutes = require('./routes/User');
-const courseRoutes = require('./routes/Course');
+const categoryRoutes = require('./routes/Category');
 const paymentRoutes = require('./routes/Payment');
 const profileRoutes = require('./routes/Profile');
 
@@ -42,7 +42,7 @@ cloudinaryConnect();
 //routes
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/profile', profileRoutes);
-app.use('/api/v1/course', courseRoutes);
+app.use('/api/v1/category', categoryRoutes);
 app.use('/api/v1/payment', paymentRoutes);
 
 //default route
