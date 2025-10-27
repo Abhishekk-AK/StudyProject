@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const mailSender = require('../utils/mailSender');
 
-exports.OTPSchema = new mongoose.Schema({
+const OTPSchema = new mongoose.Schema({
 
     email:{
         type:String,

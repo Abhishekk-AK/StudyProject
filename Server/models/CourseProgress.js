@@ -13,6 +13,3 @@ exports.courseProSchema = new mongoose.Schema({
         }
     ]
 })
-
-
-module.exports = mongoose.model("CourseProgress", courseProSchema);

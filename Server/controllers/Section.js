@@ -80,7 +80,7 @@ exports.updateSection = async (req, res) => {
 }
 
 
-exports.deletesSection = async (req, res) => {
+exports.deleteSection = async (req, res) => {
     try {
         //get ID
         const {sectionId} = req.params;

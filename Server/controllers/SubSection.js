@@ -60,5 +60,67 @@ exports.createSubSection = async (req, res) => {
 
 
 //update subsection
+exports.updateSubsection = async (req, res) => {
+    try {
+        const {subSectionId, title, description, timeDuration, videoUrl} = req.body;
+
+        if(!subSectionId || !title || !timeDuration || !description || !videoUrl) {
+            return res.status(400).json({
+                success:false,
+                message:'All fields are required.'
+            })
+        }
+
+        const updatedSubsection = await SubSection.findByIdAndUpdate(
+            subSectionId,
+            {
+                title:title,
+                description:description,
+                timeDuration:timeDuration,
+                videoUrl:videoUrl
+            },
+            {new:true}
+        )
+
+        return res.json({
+            updatedSS:updatedSubsection,
+            success:true,
+            message:'Subsection updated successfully.'
+        })
+    } catch (err) {
+        console.error(err);
+        return res.status(200).json({
+            success:false,
+            message:'Subsection could not be updated, please try again.'
+        })
+    }
+}
 
 //delete subsection
+exports.deleteSubSection = async (req, res) => {
+    try {
+        const {subSectionId} = req.body;
+
+        if(!subSectionId) {
+            return res.status(400).json({
+                success:false,
+                message:'SubSection id is required.'
+            })
+        }
+
+        const deletedSubSection = await SubSection.findByIdAndDelete(subSectionId);
+
+        return res.status(200).json({
+            success:true,
+            message:'SubSection deleted successfully.'
+        })
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success:false,
+            message:'Subsection could not be deleted, please try again.',
+            error:err.message
+        })
+    }
+}

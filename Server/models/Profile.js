@@ -17,6 +17,3 @@ exports.profileSchema = new mongoose.Schema({
         trim:true
     }
 })
-
-
-module.exports = mongoose.model("Profile", profileSchema);
