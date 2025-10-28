@@ -1,15 +1,15 @@
 const RatingAndReview = require('../models/RatingAndReview');
 const Course = require('../models/Course');
-const { default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
 
 exports.createRatingAndReview = async (req, res) => {
     try {
-        const {userId} = req.user.id;
+        const userId = req.user.id;
 
         if(!userId) {
             return res.json({
                 success:false,
-                message:'User is not registered.'
+                message:'Student is not registered.'
             })
         }
 
@@ -40,7 +40,7 @@ exports.createRatingAndReview = async (req, res) => {
         if(alreadyReviewed) {
             return res.status(403).json({
                 success:false,
-                message:'Course is already reviewed bu user.'
+                message:'Course is already reviewed by user.'
             })
         }
 
@@ -82,7 +82,7 @@ exports.createRatingAndReview = async (req, res) => {
 //get average rating
 exports.averageRating = async (req, res) => {
     try {
-        const {courseId} = req.body.co;
+        const {courseId} = req.body;
 
         // if (typeof rating !== 'number' || rating < 0 || rating > 5) {
         //     return res.status(400).json({
@@ -109,11 +109,10 @@ exports.averageRating = async (req, res) => {
             {
                 $group:{
                     _id:null,
-                    averageRating: {$avg: "rating"}
+                    averageRating: {$avg: "$rating"}
                 }
             }
         ])
-
 
         const avgRating = result[0]?.averageRating || 0;
 

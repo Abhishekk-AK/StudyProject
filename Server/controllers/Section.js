@@ -1,5 +1,6 @@
 const Section = require('../models/Section');
 const Course = require('../models/Course');
+const Subsection = require('../models/Subsection');
 
 exports.createSection = async (req, res) => {
     try {
@@ -7,7 +8,7 @@ exports.createSection = async (req, res) => {
         const {sectionName, courseId} = req.body;
 
         //data validation
-        if(!sectionName || courseId) {
+        if(!sectionName || !courseId) {
             return res.status(400).json({
                 success:false,
                 message:'All fields are required.'
@@ -27,12 +28,13 @@ exports.createSection = async (req, res) => {
                                                     },
                                                     {new:true}
                                                 )
-                                                .populate("Section")
+                                                .populate("courseContent")
 
         //return response
         return res.status(200).json({
             success:true,
             message:'Section created successfully.',
+            newSection,
             updatedCourseDetails
         })
 
@@ -52,24 +54,38 @@ exports.updateSection = async (req, res) => {
         const {sectionName, sectionId} = req.body;
 
         //data validation
-        if(!sectionName || sectionId) {
+        if(!sectionName || !sectionId) {
             return res.status(400).json({
                 success:false,
                 message:'All fields are required.'
             })
         }
 
-        //update data
-        const section = await Section.findByIdAndUpdate(
+        if( !await Section.findById(sectionId) ) {
+            return res.status(200).json({
+                success:true,
+                message:'Section not found.'
+            })
+        }
+        //update section
+        const updatedSection = await Section.findByIdAndUpdate(
                                                         sectionId,
                                                         {sectionName},
                                                         {new:true}
                                                     )
                                                     
+        if (!updatedSection) {
+            return res.status(404).json({
+                success: false,
+                message: 'Error in updating section, please try again.'
+            });
+        }
+
         return res.status(200).json({
             success:true,
             message:'Section updated successfully.'
         })
+
     } catch (err) {
         console.error(err);
         return res.status(500).json({
@@ -83,9 +99,41 @@ exports.updateSection = async (req, res) => {
 exports.deleteSection = async (req, res) => {
     try {
         //get ID
-        const {sectionId} = req.params;
+        const {sectionId, courseId} = req.query;
 
-        //delete section
+        if(!sectionId) {
+            return res.status(400).json({
+                success:false,
+                message:'Section id required.'
+            })
+        }
+
+        //find section
+        const foundSection = await Section.findById(sectionId);
+
+        if(!foundSection) {
+            return res.status(200).json({
+                success:true,
+                hasData:false,
+                message:'Section not found.'
+            })
+        }
+
+        //delete it's subsections
+        await Subsection.deleteMany({ _id: {$in: foundSection.subSection } })
+
+        //update course
+        await Course.findByIdAndUpdate(
+            courseId,
+            {
+                $pull:{
+                    courseContent:sectionId
+                }
+            },
+            {new:true}
+        )
+
+        //finally delete section
         await Section.findByIdAndDelete(sectionId);
 
         //return response
@@ -93,10 +141,11 @@ exports.deleteSection = async (req, res) => {
             success:true,
             message:'Section deleted successfully.'
         })
+
     } catch (err) {
         return res.status(500).json({
             success:false,
-            message:'Something went wrong while deleting object, please try again.'
+            message:'Something went wrong while deleting section, please try again.'
         })
     }
 }

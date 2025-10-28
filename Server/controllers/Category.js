@@ -20,7 +20,8 @@ exports.createCategory = async (req, res) => {
 
         return res.status(200).json({
             success:true,
-            message:'Category created successfully.'
+            message:'Category created successfully.',
+            categoryDetails
         })
 
     } catch (err) {
@@ -37,6 +38,15 @@ exports.showAllCategorys = async (req, res) => {
     try {
         const allCategorys = await Category.find({}, {name:true, description:true});
 
+        //if no category found
+        if(allCategorys.length === 0) {
+            return res.status(200).json({
+                success:true,
+                hasData:false,
+                message:'No category found.',
+                allCategorys
+            })
+        }
         return res.status(200).json({
             success:true,
             message:'All categorys returned successfully.',
@@ -57,6 +67,13 @@ exports.categoryPageDetails = async (req, res) => {
     try {
         const {categoryId} = req.body;
 
+        if(!categoryId) {
+            return res.status(400).json({
+                success:false,
+                message:'Category id required.'
+            })
+        }
+
         //get all courses for the specified category
         const selectedCategory = await Category.findById(categoryId).populate("courses");
 
@@ -71,10 +88,9 @@ exports.categoryPageDetails = async (req, res) => {
 
         //if ther is no courses in the category
         if(selectedCategory.courses.length === 0) {
-            console.log('No courses for this category.');
-
-            return res.status(404).json({
-                success:false,
+            return res.status(200).json({
+                success:true,
+                hasData:false,
                 message:'No courses found for the selected category.'
             })
         }
@@ -103,7 +119,7 @@ exports.categoryPageDetails = async (req, res) => {
     } catch (err) {
         return res.status(500).json({
             success:false,
-            message:'Somethin went wong while fetching category details.',
+            message:'Something went wong while fetching category details.',
             error:err.message
         })
     }

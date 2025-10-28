@@ -45,6 +45,7 @@ exports.createSubSection = async (req, res) => {
         return res.status(200).json({
             success:true,
             message:'Subsection created successfully.',
+            subsectionDetails,
             updatedSection
         })
 
@@ -99,7 +100,7 @@ exports.updateSubsection = async (req, res) => {
 //delete subsection
 exports.deleteSubSection = async (req, res) => {
     try {
-        const {subSectionId} = req.body;
+        const {sectionId, subSectionId} = req.body;
 
         if(!subSectionId) {
             return res.status(400).json({
@@ -109,6 +110,24 @@ exports.deleteSubSection = async (req, res) => {
         }
 
         const deletedSubSection = await SubSection.findByIdAndDelete(subSectionId);
+
+        if(!deletedSubSection) {
+            return res.status(200).json({
+                success:true,
+                hasData:false,
+                message:'Subsection not found.'
+            })
+        }
+
+        await Section.findByIdAndUpdate(
+            sectionId,
+            {
+                $pull:{
+                    subSection:subSectionId
+                }
+            },
+            {new:true}
+        )
 
         return res.status(200).json({
             success:true,
