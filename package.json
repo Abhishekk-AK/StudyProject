@@ -1,0 +1,13 @@
+{
+  "name": "study-project",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "client": "npm --prefix client run dev",
+    "server": "npm --prefix server run dev",
+    "dev": "concurrently -k -c \"bgBlue.bold,bgGreen.bold\" -n \"🖥️ CLIENT,⚙️ SERVER\" \"npm run client\" \"npm run server\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
