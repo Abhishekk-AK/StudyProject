@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router";
+import Home from "./pages/Home";
 
 function App() {
   const [data, setData] = useState(null);
@@ -10,12 +12,10 @@ function App() {
   }, []);
 
   return (
-    <div className="p-6 text-lg">
-      {data ? (
-        <p>✅ {data.message}</p>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div className="w-screen min-h-screen bg-richblack-900 flex flex-col font-inter">
+      <Routes>
+        <Route path='/' element={<Home/>} />
+      </Routes>
     </div>
   );
 }
