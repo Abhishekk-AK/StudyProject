@@ -1,8 +1,15 @@
 import { Link, matchPath, useLocation } from 'react-router-dom'
 import Logo from '../../assets/TimelineLogo/Logo1.svg'
 import { NavbarLinks } from '../../data/navbar-links'
+import { useSelector } from 'react-redux'
+import { AiOutlineShoppingCart } from 'react-icons/ai'
+import ProfileDropdown from '../core/Auth/ProfileDropdown'
 
 const Navbar = () => {
+
+    const {token} = useSelector( (state) => state.auth );
+    const {user} = useSelector( (state) => state.profile );
+    const {totalItems} = useSelector( (state) => state.cart );
 
     const location = useLocation();
     const matchRoute = (route) => {
@@ -23,7 +30,13 @@ const Navbar = () => {
                 NavbarLinks.map((link, index) => (
                     <li key={index}>
                         {
-                        link.title === 'Catalog' ? (<div></div>) : (
+                        link.title === 'Catalog' 
+                        ? (
+                            <div>
+                              
+                            </div>
+                          ) 
+                        : (
                             <Link to={link?.path}>
                             <p className={`${matchRoute(link?.path) ? 'text-yellow-25' : 'text-richblack-25'}`}>
                                 {link.title}
@@ -39,7 +52,41 @@ const Navbar = () => {
 
         {/* login, signup, dashboard, cart */}
         <div className='flex gap-x-4 items-center'>
-
+          {
+            user && user?.accountType !== 'Instructor' && (
+              <Link to='/dashboard/cart' className='relative'>
+                <AiOutlineShoppingCart />
+                {
+                  totalItems > 0 && (
+                    <span>
+                      {totalItems}
+                    </span>
+                  )
+                }
+              </Link>
+            )
+          }
+          {
+            token === null && (
+              <Link to='/login'>
+                <button className='border border-richblack-700 text-richblack-100 px-2 py-1 rounded-md'>
+                  Login
+                </button>
+              </Link>
+            )
+          }
+          {
+            token === null && (
+              <Link to='/signup'>
+                <button className='border border-richblack-700 text-richblack-100 px-2 py-1 rounded-md'>
+                  Sign Up
+                </button>
+              </Link>
+            )
+          }
+          {
+            token !== null && <ProfileDropdown/>
+          }
         </div>
 
       </div>
