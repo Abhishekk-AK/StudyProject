@@ -95,8 +95,6 @@ const Home = () => {
               }
               codeColor={'text-yellow-25'}
             />
-
-            <ExploreMore />
             
           </div>    
 
@@ -145,7 +143,10 @@ const Home = () => {
               }
               codeColor={'text-yellow-25'}
             />
-          </div>        
+          </div>  
+          
+          <ExploreMore />   
+             
         </div>
 
       {/* Section2 */}
