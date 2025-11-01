@@ -119,8 +119,8 @@ html, body {
   --color-yellow-900: #251400;
 
   /* maxwidth maxcontent*/
-  --size-maxContent: 1260px;
-  --size-maxContentTab: 650px;
+  --container-max-content: 1260px;
+  --container-max-content-tab: 650px;
 }
 
 @layer theme {
