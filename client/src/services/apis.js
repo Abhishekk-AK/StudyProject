@@ -6,6 +6,12 @@ export const authEndpoints = {
     RESETPASSWORD_API: BASE_URL + '/auth/reset-password'
 }
 
+//contactUs
+export const contactUsEndpoint = {
+    CONTACT_US_API: BASE_URL + '/common/submit-contact-form'
+}
+
+
 export const categories = {
     CATEGORIES_API: BASE_URL + '/category/all'
 }

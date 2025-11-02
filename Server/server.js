@@ -13,6 +13,7 @@ const userRoutes = require('./routes/User');
 const categoryRoutes = require('./routes/Category');
 const paymentRoutes = require('./routes/Payment');
 const profileRoutes = require('./routes/Profile');
+const commonRoutes = require('./routes/Common');
 
 //create express app
 const app = express();
@@ -44,6 +45,7 @@ app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/category', categoryRoutes);
 app.use('/api/v1/payment', paymentRoutes);
+app.use('/api/v1/common', commonRoutes);
 
 //default route
 app.get('/', (req, res) => {
