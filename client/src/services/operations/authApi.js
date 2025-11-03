@@ -1,13 +1,26 @@
 import { apiConnector } from "../apiConnector"
-import { setLoading } from '../../slices/AuthSlice'
+import { setLoading, setToken } from '../../slices/AuthSlice'
 import toast from "react-hot-toast";
 import { authEndpoints } from "../apis";
+import { setUser } from "../../slices/ProfileSlice";
 
 const {
     RESETPASSTOKEN_API,
     RESETPASSWORD_API
 } = authEndpoints
 
+
+export function logout(navigate) {
+    return (dispatch) => {
+        dispatch(setToken(null));
+        dispatch(setUser(null));
+        dispatch(resetCart());
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        toast.success('Logged Out');
+        navigate('/');
+    }
+}
 
 export function getPasswordResetToken(email, setEmailSent) {
     return async(dispatch) => {

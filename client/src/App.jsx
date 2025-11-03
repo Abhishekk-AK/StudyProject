@@ -9,6 +9,9 @@ import UpdatePassword from "./pages/UpdatePassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import About from "./pages/About";
 import ContactUs from "./pages/ContactUs";
+import MyProfile from "./components/core/Dashboard/MyProfile";
+import PrivateRoute from "./components/core/Auth/PrivateRoute";
+import Dashboard from "./pages/Dashboard";
 
 
 function App() {
@@ -70,6 +73,14 @@ function App() {
             <ContactUs/>
           }
         />
+        <Route
+          element={
+            <PrivateRoute>
+              <Dashboard/>
+            </PrivateRoute>
+          }
+        />
+        <Route path="dashboard/my-profile" element={<MyProfile/>} />
       </Routes>
     </div>
   );
