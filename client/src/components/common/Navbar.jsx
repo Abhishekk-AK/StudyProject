@@ -40,7 +40,7 @@ const Navbar = () => {
     }
 
   return (
-    <div className="flex h14 items-center justify-center border-b border-b-richblack-700 ">
+    <div className="flex items-center justify-center border-b border-b-richblack-700 ">
       <div className="flex w-11/12 max-w-max-content items-center justify-between">
 
         <Link to={'/'}>

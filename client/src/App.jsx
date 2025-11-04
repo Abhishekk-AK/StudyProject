@@ -12,6 +12,7 @@ import ContactUs from "./pages/ContactUs";
 import MyProfile from "./components/core/Dashboard/MyProfile";
 import PrivateRoute from "./components/core/Auth/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
+import OpenRoute from "./components/core/Auth/OpenRoute";
 
 
 function App() {
@@ -31,10 +32,9 @@ function App() {
         <Route
           path="signup"
           element={
-            <Signup/>
-            // <OpenRoute>
-            //   <Signup/>
-            // </OpenRoute>
+            <OpenRoute>
+              <Signup/>
+            </OpenRoute>
           }
         />
         <Route

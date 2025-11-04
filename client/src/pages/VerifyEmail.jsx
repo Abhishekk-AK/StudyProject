@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+import OtpInput from 'react-otp-input'
+import { Link } from 'react-router-dom'
+import { sendSignupOtp, signUp } from "../services/operations/authApi"
+
 
 const VerifyEmail = () => {
 
   const [otp, setOtp] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {loading, signupData} = useSelector( (state) => state.auth );
+  const {loading, signUpData} = useSelector( (state) => state.auth );
 
   useEffect( () => {
-    if(!signupData) {
+    if(!signUpData) {
       navigate('/signup');
     }
   },[])
@@ -25,9 +29,9 @@ const VerifyEmail = () => {
       email,
       password,
       confirmPassword
-    } = signupData;
+    } = signUpData;
 
-    dispatch(signUp(accountType, firstName, lastName, email, password, confirmPassword, navigate));
+    dispatch(signUp(accountType, firstName, lastName, email, password, confirmPassword, otp, navigate));
 
   }
 
@@ -68,7 +72,7 @@ const VerifyEmail = () => {
                     </Link>
                   </div>
                   <button 
-                    onClick={ () => dispatch(sendOtp(signupData.email)) }
+                    onClick={ () => dispatch(sendSignupOtp(signUpData.email)) }
                   >
                     Resend email
                   </button>
