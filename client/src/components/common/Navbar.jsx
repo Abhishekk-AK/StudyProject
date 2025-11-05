@@ -74,7 +74,7 @@ const Navbar = () => {
                                     ))
                                   )
                                   : (
-                                    <div></div>
+                                    <></>
                                   )
                                 }
                               </div>
@@ -95,10 +95,10 @@ const Navbar = () => {
         </nav>
 
         {/* login, signup, dashboard, cart */}
-        <div className='flex gap-x-4 items-center'>
+        <div className='flex gap-x-4 items-center  text-richblack-25'>
           {
             user && user?.accountType !== 'Instructor' && (
-              <Link to='/dashboard/cart' className='relative'>
+              <Link to='/dashboard/cart' className='relative text-richblack-25'>
                 <AiOutlineShoppingCart />
                 {
                   totalItems > 0 && (

@@ -3,7 +3,7 @@ import IconBtn from "./IconBtn"
 const ConfirmationModal = ({modalData}) => {
   return (
     <>
-      <div>
+      <div className="text-white">
         <p>
             {modalData.text1}
         </p>

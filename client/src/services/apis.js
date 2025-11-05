@@ -9,6 +9,12 @@ export const authEndpoints = {
     RESETPASSWORD_API: BASE_URL + '/auth/reset-password'
 }
 
+//profile 
+export const profileEndpoints = {
+    GET_USER_DETAILS_API: BASE_URL + '/profile/details',
+    GET_USER_ENROLLED_COURSES_API: BASE_URL + '/profile/enrolled-courses'
+}
+
 //contactUs
 export const contactUsEndpoint = {
     CONTACT_US_API: BASE_URL + '/common/submit-contact-form'

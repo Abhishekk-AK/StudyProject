@@ -25,7 +25,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className='flex min-w-[222px] flex-col border-r-[1] border-richblack-700 h-[calc(100vh-3.5rem)] py-10 bg-richblue-800'>
+      <div className='flex min-w-[222px] flex-col border-r-[1] text-richblack-5 border-richblack-700 h-[calc(100vh-3.5rem)] py-10 bg-richblue-800'>
         
         <div>
             {
@@ -44,7 +44,7 @@ const Sidebar = () => {
         <div>
             <SidebarLink
                 link={{name:'Settings', path:'dashboard/settings'}}
-                iconName='VscSettingGear'
+                iconName="VscSettingsGear"
             />
 
             <button
@@ -59,8 +59,8 @@ const Sidebar = () => {
 
                 className='text-sm font-medium text-richblack-400'
             >
-            <div className='flex items-center gap-x-2'>
-                <VscSignOut className='text-lg'/>
+            <div className='flex items-center gap-x-2 text-lg text-richblack-5'>
+                <VscSignOut/>
                 <span>Logout</span>
             </div>
 

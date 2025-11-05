@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/core/Dashboard/Sidebar';
+import MyProfile from '../components/core/Dashboard/MyProfile';
 
 const Dashboard = () => {
 
@@ -16,9 +17,9 @@ const Dashboard = () => {
     }
 
   return (
-    <div className='relative flex min-h-[calc(100vh-3.5rem)]'>
+    <div className='relative flex '>
         <Sidebar/>
-        <div className='h-[calc(100vh-3.5rem)] overflow-auto'>
+        <div className='mx-auto overflow-auto'>
             <div className='w-11/12 max-w-[1000px] py-10 mx-auto'>
                 <Outlet/>
             </div>

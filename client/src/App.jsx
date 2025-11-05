@@ -13,6 +13,9 @@ import MyProfile from "./components/core/Dashboard/MyProfile";
 import PrivateRoute from "./components/core/Auth/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
 import OpenRoute from "./components/core/Auth/OpenRoute";
+import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
+import Cart from './components/core/Dashboard/Cart/index'
+import { ACCOUNT_TYPE } from "./utils/constants";
 
 
 function App() {
@@ -79,8 +82,19 @@ function App() {
               <Dashboard/>
             </PrivateRoute>
           }
-        />
-        <Route path="dashboard/my-profile" element={<MyProfile/>} />
+        >
+         <Route path="dashboard/my-profile" element={<MyProfile/>} /> 
+         
+         {
+          //user?.accountType ===
+           ACCOUNT_TYPE.STUDENT && (
+            <>
+              <Route path="dashboard/enrolled-courses" element={<EnrolledCourses/>} />
+              <Route path="dashboard/cart" element={<Cart/>} />
+            </>
+          )
+         }
+        </Route>
       </Routes>
     </div>
   );

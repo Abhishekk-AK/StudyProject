@@ -4,11 +4,11 @@ import IconBtn from "../../common/IconBtn";
 
 const MyProfile = () => {
 
-    const {user} = useSelector((state) => state.auth);
+    const {user} = useSelector((state) => state.profile);
     const navigate = useNavigate();
 
   return (
-    <>
+    <div className="text-white">
       <h1>
         My Profile
       </h1>
@@ -16,7 +16,7 @@ const MyProfile = () => {
       <div>
         <div>
             <img
-                src={`{user?.image}`}
+                src={`${user?.image}`}
                 alt={`profile-${user?.firstName}`}
                 className="aspect-square w-[78px] rounded-full object-cover"
             />
@@ -86,7 +86,7 @@ const MyProfile = () => {
                 </div>
             </div>
       </div>
-    </>
+    </div>
   )
 }
 

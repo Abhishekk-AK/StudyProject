@@ -84,6 +84,7 @@ export function login(email, password, navigate) {
 
             dispatch(setUser({ ...response.data.user, image:userImage }))
             localStorage.setItem('token', JSON.stringify(response.data.token))
+            localStorage.setItem('user', JSON.stringify(response.data.user))
             navigate('/dashboard/my-profile')
 
         } catch (err) {
@@ -100,7 +101,7 @@ export function logout(navigate) {
     return (dispatch) => {
         dispatch(setToken(null));
         dispatch(setUser(null));
-        dispatch(resetCart());
+        //dispatch(resetCart());
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         toast.success('Logged Out');
