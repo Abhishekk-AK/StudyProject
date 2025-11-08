@@ -20,7 +20,13 @@ export const contactUsEndpoint = {
     CONTACT_US_API: BASE_URL + '/common/submit-contact-form'
 }
 
-
-export const categories = {
+//categories
+export const categoryEndpoints = {
     CATEGORIES_API: BASE_URL + '/category/all'
+}
+
+//course
+const courseEndpoints = {
+    ADDCOURSE_API: BASE_URL + 'category/course/create',
+    EDITCOURSE_API: BASE_URL + 'category/course/update'
 }
