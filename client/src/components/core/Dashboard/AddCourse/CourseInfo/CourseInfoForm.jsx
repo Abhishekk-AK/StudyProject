@@ -49,7 +49,7 @@ const CourseInfoForm = () => {
             setValue('courseBenefits', course.whatYouWillLearn)
             setValue('courseCategory', course.category)
             setValue('courseRequirements', course.instructions)
-            setValue('courseImage', course.thumbnail)
+            setValue('courseImage', course.thumbnailImage)
         }
 
         getCategories()
@@ -66,7 +66,7 @@ const CourseInfoForm = () => {
             || currentValues.courseBenefits !== course.whatYouWillLearn
             || currentValues.courseCategory._id !== course.category._id
             || currentValues.courseRequirements.toString() !== course.instructions.toString()
-            || currentValues.courseImage !== course.thumbnail
+            || currentValues.courseImage !== course.thumbnailImage
         ) {
             return true
         }
@@ -104,8 +104,8 @@ const CourseInfoForm = () => {
                 if(currentValues.courseRequirements.toString() !== course.instructions.toString())
                     formData.append('instructions', JSON.stringify(data.courseRequirements))
 
-                if(currentValues.courseImage !== course.thumbnail)
-                    formData.append('thumbnail', data.courseImage)
+                if(currentValues.courseImage !== course.thumbnailImage)
+                    formData.append('thumbnailImage', data.courseImage)
 
                 setLoading(true)
                 const result = await editCourseDetails(formData, token)
@@ -124,14 +124,14 @@ const CourseInfoForm = () => {
         const formData = new FormData()
 
         formData.append('courseName', data.courseTitle)
-        formData.append('courseDescription', data.courseShortDesc)
+        formData.append('courseDescription', data.courseDesc)
         formData.append('price', data.coursePrice)
         formData.append('tag', JSON.stringify(data.courseTags))
         formData.append('whatYouWillLearn', data.courseBenefits)
         formData.append('category', data.courseCategory)
         formData.append('status', COURSE_STATUS.DRAFT)
         formData.append('instructions', JSON.stringify(data.courseRequirements))
-        formData.append('thumbnail', data.courseImage)
+        formData.append('thumbnailImage', data.courseImage)
         
         setLoading(true)
         const result = await addCourseDetails(formData, token)
@@ -144,7 +144,7 @@ const CourseInfoForm = () => {
     }
 
   return (
-    <>
+    <div className="text-white">
       <form 
         onSubmit={handleSubmit(onSubmit)}
         className="w-full"
@@ -260,7 +260,7 @@ const CourseInfoForm = () => {
                 register={register}
                 setValue={setValue}
                 errors={errors} 
-                editData={editCourse ? course?.thumbnail : null}
+                editData={editCourse ? course?.thumbnailImage : null}
             />
         </div>
 
@@ -315,7 +315,7 @@ const CourseInfoForm = () => {
         </div>
 
       </form>
-    </>
+    </div>
   )
 }
 

@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { courseEndpoints } from "../apis";
+import { categoryEndpoints, courseEndpoints } from "../apis";
 import { apiConnector } from "../apiConnector";
 
 const {
@@ -14,7 +14,7 @@ const {
 export async function fetchCourseCategories() {
     let result = []
     const toastId = toast.loading('Loading...')
-    dis
+
     try {
         const response = await apiConnector('GET', CATEGORIES_API)
 
@@ -22,7 +22,7 @@ export async function fetchCourseCategories() {
             throw new Error(response.data.message)
         }
 
-        result = response?.data?.allCategories
+        result = response?.data?.allCategorys
         toast.success('course Categories fetched successfully.')
 
     } catch (err) {
@@ -38,10 +38,10 @@ export async function addCourseDetails(data, token) {
     let result = null
     const toastId = toast.loading('Loading...')
     try {
-        const response = await apiConnector('POST', EDITCOURSE_API, data,
+        const response = await apiConnector('POST', ADDCOURSE_API, data,
             {
                 'Content-Type': 'multipart/form-data',
-                Authorization: `Beares ${token}`
+                Authorization: `Bearer ${token}`
             }
         )
 
@@ -66,10 +66,10 @@ export async function editCourseDetails(data, token) {
     let result = null
     const toastId = toast.loading('Loading...')
     try {
-        const response = await apiConnector('POST', ADDCOURSE_API, data,
+        const response = await apiConnector('POST', EDITCOURSE_API, data,
             {
                 'Content-Type': 'multipart/form-data',
-                Authorization: `Beares ${token}`
+                Authorization: `Bearer ${token}`
             }
         )
 

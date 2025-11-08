@@ -6,8 +6,8 @@ import { AiOutlineShoppingCart } from 'react-icons/ai'
 import ProfileDropdown from '../core/Auth/ProfileDropdown'
 import { useEffect, useState } from 'react'
 import { apiConnector } from '../../services/apiConnector'
-import { categories } from '../../services/apis'
 import { IoIosArrowDropdownCircle } from 'react-icons/io'
+import { fetchCourseCategories } from '../../services/operations/courseApi'
 
 
 const Navbar = () => {
@@ -15,20 +15,21 @@ const Navbar = () => {
     const {token} = useSelector( (state) => state.auth );
     const {user} = useSelector( (state) => state.profile );
     const {totalItems} = useSelector( (state) => state.cart );
+    const [loading, setLoading] = useState(null);
 
     const location = useLocation();
 
     const [subLinks, setSubLinks] = useState([]);
 
     const fetchSubLinks = async () => {
-        try {
-          const result = await apiConnector('GET', categories.CATEGORIES_API);
-          console.log('Printing sublinks result:', result);
-          setSubLinks(result.data.allCategorys);
-          console.log(result.data.allCategorys);
-        } catch (err) {
-          console.log('Could not fetch the catalog list.')
-        }
+          setLoading(true)
+          const categories = await fetchCourseCategories()
+          console.log(categories)
+          
+          if(categories.length > 0) {
+              setSubLinks(categories)
+          }
+          setLoading(false)
       }
 
     useEffect( () => {

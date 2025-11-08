@@ -35,7 +35,7 @@ const RequirementsField = (
     }
   }
 
-  const handleRemoveRequirement = () => {
+  const handleRemoveRequirement = (index) => {
     const updatedRequirements = [...requirementsList]
     updatedRequirements.splice(index, 1)
     setRequirementsList(updatedRequirements)

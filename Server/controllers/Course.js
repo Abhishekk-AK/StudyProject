@@ -7,7 +7,7 @@ const {uploadImageToCloudinary} = require('../utils/imageUploader');
 exports.createCourse = async (req, res) => {
     try {
         //fetch data
-        const {courseName, courseDescription, whatYouWillLearn, price , category} = req.body;
+        const {courseName, courseDescription, whatYouWillLearn, price , category, tag, instructions} = req.body;
 
         //get thumbnail from temp local server temporarily stored by cloudinary
         const thumbnail = req.files.thumbnailImage;
@@ -19,7 +19,7 @@ exports.createCourse = async (req, res) => {
                 message:'Category is required.'
             })
         }
-        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !thumbnail) {
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !instructions || !thumbnail) {
             return res.status(400).json({
                 success:false,
                 message:'All fields are required.'
@@ -62,7 +62,9 @@ exports.createCourse = async (req, res) => {
             whatYouWillLearn: whatYouWillLearn,
             price: price,
             category: categoryDetails._id,
-            thumbnail: thumbnailImage.secure_url
+            thumbnail: thumbnailImage.secure_url,
+            tag: tag,
+            instructions: instructions
         })
 
         //add new course to the userschema of instructor

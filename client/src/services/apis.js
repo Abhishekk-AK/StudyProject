@@ -26,7 +26,7 @@ export const categoryEndpoints = {
 }
 
 //course
-const courseEndpoints = {
-    ADDCOURSE_API: BASE_URL + 'category/course/create',
-    EDITCOURSE_API: BASE_URL + 'category/course/update'
+export const courseEndpoints = {
+    ADDCOURSE_API: BASE_URL + '/category/course/create',
+    EDITCOURSE_API: BASE_URL + '/category/course/update'
 }
