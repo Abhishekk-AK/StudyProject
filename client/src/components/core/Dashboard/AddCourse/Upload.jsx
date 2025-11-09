@@ -73,7 +73,7 @@ const Upload = (
                   <img
                     src={previewSource}
                     alt="Preview"
-                    className="h-full w-full object-cover rounded-md"
+                    className="max-w-[500px] aspect-video object-cover rounded-md"
                   />
                 )
                 : (
@@ -114,8 +114,8 @@ const Upload = (
                 a file
               </p>
               <ul className="">
-                <li>Aspect ratio 16:9</li>
-                <li>Recommended size 1024x576</li>
+                <li>Aspect ratio: 16:9</li>
+                <li>Recommended size: 1024*576</li>
               </ul>
             </div>
           )
