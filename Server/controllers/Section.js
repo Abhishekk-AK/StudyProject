@@ -51,10 +51,10 @@ exports.createSection = async (req, res) => {
 exports.updateSection = async (req, res) => {
     try {
         //data fetch
-        const {sectionName, sectionId} = req.body;
+        const {sectionName, sectionId, courseId} = req.body;
 
         //data validation
-        if(!sectionName || !sectionId) {
+        if(!sectionName || !sectionId || !courseId) {
             return res.status(400).json({
                 success:false,
                 message:'All fields are required.'
@@ -81,9 +81,14 @@ exports.updateSection = async (req, res) => {
             });
         }
 
+        const updatedCourse = await Course.findById(courseId)
+                                            .populate("courseContent")      
+
         return res.status(200).json({
             success:true,
-            message:'Section updated successfully.'
+            message:'Section updated successfully.',
+            updatedSection,
+            updatedCourse
         })
 
     } catch (err) {
@@ -99,7 +104,7 @@ exports.updateSection = async (req, res) => {
 exports.deleteSection = async (req, res) => {
     try {
         //get ID
-        const {sectionId, courseId} = req.query;
+        const {sectionId, courseId} = req.body;
 
         if(!sectionId) {
             return res.status(400).json({
@@ -136,10 +141,14 @@ exports.deleteSection = async (req, res) => {
         //finally delete section
         await Section.findByIdAndDelete(sectionId);
 
+        const updatedCourse = await Course.findById(courseId)
+                                            .populate("courseContent")
+
         //return response
         return res.status(200).json({
             success:true,
-            message:'Section deleted successfully.'
+            message:'Section deleted successfully.',
+            course:updatedCourse
         })
 
     } catch (err) {

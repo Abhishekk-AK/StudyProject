@@ -1,6 +1,14 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RxDropdownMenu } from "react-icons/rx"
+import { MdEdit } from "react-icons/md"
+import { RiDeleteBin6Line } from "react-icons/ri"
+import { BiSolidDownArrow } from "react-icons/bi"
+import { AiOutlinePlus } from "react-icons/ai"
+import SubsectionModal from "./SubsectionModal"
+import ConfirmationModal from "../../../../common/ConfirmationModal"
+import { deleteSection, deleteSubSection } from "../../../../../services/operations/courseApi"
+import { setCourse } from "../../../../../slices/CourseSlice"
 
 const NestedView = ({handleChangeEditSectionName}) => {
 
@@ -13,6 +21,47 @@ const NestedView = ({handleChangeEditSectionName}) => {
   const [editSubsection, setEditSubsection] = useState(null)
   const [confirmationModal, setConfirmationModal] = useState(null)
 
+
+  const handleDeleteSection = async (sectionId) => {
+  console.log(sectionId)
+  console.log(course._id)
+    const result = await deleteSection(
+      {
+        sectionId,
+        courseId: course._id,
+        token
+      }
+    )
+
+    if(result) {
+      dispatch(setCourse(result))
+    }
+
+    setConfirmationModal(null)
+  }
+
+  const handleDeleteSubSection = async (sectionId, subSectionId) => {
+    const result = await deleteSubSection(
+      {
+        subSectionId, 
+        sectionId, 
+      },
+      token
+    )
+
+    if(result) {
+      const updatedCourseContent = course.courseContent.map(
+                (section) => 
+                    section._id === sectionId ? result : section
+            )
+            const updatedCourse = {...course, courseContent: updatedCourseContent}
+      dispatch(setCourse(result))
+    }
+
+    setConfirmationModal(null)
+  }
+  
+
   return (
     <>
       <div className="text-richblack-5">
@@ -20,17 +69,114 @@ const NestedView = ({handleChangeEditSectionName}) => {
           course?.courseContent?.map((section) => (
             <details key={section._id} open>
 
-              <summary>
-                <div>
+              <summary className="flex items-center justify-between border-b-2">
+                <div className="flex items-center">
                   <RxDropdownMenu/>
                   <p>{section?.sectionName}</p>
                 </div>
+
+                <div className="flex items-center gap-x-3">
+                  <button
+                    onClick={() => handleChangeEditSectionName(section._id, section.sectionName)}
+                  >
+                    <MdEdit/>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setConfirmationModal({
+                        text1: "Delete this section.",
+                        text2: "All the lectures in this section will be deleted.",
+                        btn1Text: "Delete",
+                        btn2Text: "Cancel",
+                        btn1Handler: () => handleDeleteSection(section._id),
+                        btn2Handler: () => setConfirmationModal(null)
+                      })
+                    }}
+                  >
+                    <RiDeleteBin6Line/>
+                  </button>
+                  <span>|</span>
+                  <BiSolidDownArrow/>
+                </div>
               </summary>
+
+              <div>
+                {
+                  section.subSection.map((data) => (
+                    <div
+                      key={data?._id}
+                      onClick={() => setViewSubsection(data)}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex items-center">
+                        <RxDropdownMenu/>
+                        <p>{data?.title}</p>
+                      </div>
+                      <div
+                        className="flex items-center"
+                      >
+                        <button
+                          onClick={() => setEditSubsection( {...data, sectionId:section._id}) }
+                        >
+                          <MdEdit/>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setConfirmationModal({
+                              text1: "Delete this Subsection.",
+                              text2: "Selected lecture will be deleted.",
+                              btn1Text: "Delete",
+                              btn2Text: "Cancel",
+                              btn1Handler: () => handleDeleteSubSection(data._id, section._id),
+                              btn2Handler: () => setConfirmationModal(null)
+                            })
+                          }}
+                        >
+                          <RiDeleteBin6Line/>
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                }
+                <button
+                  onClick={() => setAddSubsection(section._id)}
+                  className="flex items-center"
+                >
+                  <AiOutlinePlus/>
+                  <p>Add Lecture</p>
+                </button>
+              </div>
 
             </details>
           ))
         }
       </div>
+      {
+        addSubsection 
+        ? <SubsectionModal 
+            modalData={addSubsection} 
+            setModalDta={setAddSubsection} 
+            add={true}   
+          />
+        : viewSubsection
+          ? <SubsectionModal
+              modalData={viewSubsection} 
+              setModalDta={setViewSubsection} 
+              view={true}
+            />
+          : editSubsection
+            ? <SubsectionModal
+              modalData={editSubsection} 
+              setModalDta={setEditSubsection} 
+              edit={true}
+              />
+            : <div></div>
+      }
+      {
+        confirmationModal 
+        ? <ConfirmationModal modalData={confirmationModal} />
+        : <div></div>
+      }
     </>
   )
 }

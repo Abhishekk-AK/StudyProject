@@ -97,7 +97,7 @@ export async function editCourseDetails(data, token) {
 }
 
 
-export async function  createSection(data, token) {
+export async function createSection(data, token) {
     let result = null 
     const toastId = toast.loading('Loading...')
     try {
@@ -124,11 +124,11 @@ export async function  createSection(data, token) {
     return result
 }
 
-export async function  updateSection(data, token) {
+export async function updateSection(data, token) {
     let result = null 
     const toastId = toast.loading('Loading...')
     try {
-        const response = await apiConnector('POST', UPDATE_SECTION_API, data,
+        const response = await apiConnector('PUT', UPDATE_SECTION_API, data,
             {
                 Authorization: `Bearer ${token}`
             }
@@ -139,7 +139,7 @@ export async function  updateSection(data, token) {
             throw new Error('Could not edit section.')
         }
 
-        result = response?.data?.data
+        result = response?.data?.updatedCourse
         toast.success('Section edited successfully.')
 
     } catch (err) {
@@ -150,11 +150,11 @@ export async function  updateSection(data, token) {
     return result
 }
 
-export async function  deleteSection(data, token) {
+export async function deleteSection(data, token) {
     let result = null 
     const toastId = toast.loading('Loading...')
     try {
-        const response = await apiConnector('POST', DELETE_SECTION_API, data,
+        const response = await apiConnector('DELETE', DELETE_SECTION_API, data,
             {
                 Authorization: `Bearer ${token}`
             }
@@ -165,7 +165,7 @@ export async function  deleteSection(data, token) {
             throw new Error('Could not delete section.')
         }
 
-        result = response?.data?.data
+        result = response?.data?.course
         toast.success('Section deleted successfully.')
 
     } catch (err) {
