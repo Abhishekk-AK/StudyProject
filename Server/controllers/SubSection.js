@@ -131,14 +131,14 @@ exports.deleteSubSection = async (req, res) => {
         const deletedSubSection = await SubSection.findByIdAndDelete(subSectionId);
 
         if(!deletedSubSection) {
-            return res.status(200).json({
-                success:true,
+            return res.status(400).json({
+                success:false,
                 hasData:false,
                 message:'Subsection not found.'
             })
         }
 
-        await Section.findByIdAndUpdate(
+        const updatedSection = await Section.findByIdAndUpdate(
             sectionId,
             {
                 $pull:{
@@ -146,11 +146,12 @@ exports.deleteSubSection = async (req, res) => {
                 }
             },
             {new:true}
-        )
+        ).populate("subSection")
 
         return res.status(200).json({
             success:true,
-            message:'SubSection deleted successfully.'
+            message:'SubSection deleted successfully.',
+            updatedSection
         })
 
     } catch (err) {

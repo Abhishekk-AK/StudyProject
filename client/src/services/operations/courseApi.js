@@ -229,11 +229,11 @@ export async function updateSubSection(data, token) {
     return result
 }
 
-export async function  deleteSubSection(data, token) {
+export async function deleteSubSection(data, token) {
     let result = null 
     const toastId = toast.loading('Loading...')
     try {
-        const response = await apiConnector('POST', DELETE_SUBSECTION_API, data,
+        const response = await apiConnector('DELETE', DELETE_SUBSECTION_API, data,
             {
                 Authorization: `Bearer ${token}`
             }
@@ -244,7 +244,7 @@ export async function  deleteSubSection(data, token) {
             throw new Error('Could not delete subsection.')
         }
 
-        result = response?.data?.data
+        result = response?.data?.updatedSection
         toast.success('Subsection deleted successfully.')
 
     } catch (err) {
