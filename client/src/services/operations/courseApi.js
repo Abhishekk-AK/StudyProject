@@ -177,7 +177,7 @@ export async function deleteSection(data, token) {
 }
 
 
-export async function  createSubSection(data, token) {
+export async function createSubSection(data, token) {
     let result = null 
     const toastId = toast.loading('Loading...')
     try {
@@ -192,9 +192,9 @@ export async function  createSubSection(data, token) {
             throw new Error('Could not add subsection.')
         }
 
-        result = response?.data?.data
+        result = response?.data?.updatedSection
         toast.success('New Subsection created successfully.')
-
+console.log(result)
     } catch (err) {
         console.log('Error in creating New subsection:', err)
         toast.error(err.message)

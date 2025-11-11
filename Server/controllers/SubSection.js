@@ -5,13 +5,13 @@ const {uploadImageToCloudinary} = require('../utils/imageUploader');
 exports.createSubSection = async (req, res) => {
     try {
         //fetch data
-        const {sectionId, title, timeDuration, description} = req.body;
+        const {sectionId, title, description} = req.body;
 
         //extract file/video from cloudinary
         const video = req.files.videoFile;
 
         //validation
-        if(!sectionId || !title || !timeDuration || !description) {
+        if(!sectionId || !title || !description) {
             return res.status(400).json({
                 success:true,
                 message:'All fields are required.'
@@ -24,7 +24,7 @@ exports.createSubSection = async (req, res) => {
         //create on subsection
         const subsectionDetails = await SubSection.create({
                                                         title: title,
-                                                        timeDuration: timeDuration,
+                                                        //timeDuration: timeDuration,
                                                         description: description,
                                                         videoUrl: uploadDetails.secure_url
                                                     })

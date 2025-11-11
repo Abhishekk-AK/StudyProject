@@ -113,6 +113,7 @@ const NestedView = ({handleChangeEditSectionName}) => {
                         <p>{data?.title}</p>
                       </div>
                       <div
+                        onClick={(e) => e.stopPropagation()}
                         className="flex items-center"
                       >
                         <button
@@ -155,19 +156,19 @@ const NestedView = ({handleChangeEditSectionName}) => {
         addSubsection 
         ? <SubsectionModal 
             modalData={addSubsection} 
-            setModalDta={setAddSubsection} 
+            setModalData={setAddSubsection} 
             add={true}   
           />
         : viewSubsection
           ? <SubsectionModal
               modalData={viewSubsection} 
-              setModalDta={setViewSubsection} 
+              setModalData={setViewSubsection} 
               view={true}
             />
           : editSubsection
             ? <SubsectionModal
               modalData={editSubsection} 
-              setModalDta={setEditSubsection} 
+              setModalData={setEditSubsection} 
               edit={true}
               />
             : <div></div>
