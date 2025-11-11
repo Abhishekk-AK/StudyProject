@@ -63,28 +63,47 @@ exports.createSubSection = async (req, res) => {
 //update subsection
 exports.updateSubsection = async (req, res) => {
     try {
-        const {subSectionId, title, description, timeDuration, videoUrl} = req.body;
+        const {sectionId, subSectionId, title, description} = req.body;
 
-        if(!subSectionId || !title || !timeDuration || !description || !videoUrl) {
+        if(!subSectionId || !sectionId) {
             return res.status(400).json({
                 success:false,
-                message:'All fields are required.'
+                message:'Section and subsection id required.'
             })
         }
 
-        const updatedSubsection = await SubSection.findByIdAndUpdate(
-            subSectionId,
-            {
-                title:title,
-                description:description,
-                timeDuration:timeDuration,
-                videoUrl:videoUrl
-            },
-            {new:true}
-        )
+        const subSection = await SubSection.findById(subSectionId)
+        if(!subSection) {
+            return res.status(404).json({
+                success:false,
+                message:"Subsection not found."
+            })
+        }
+
+        //check for undefined values
+        if(title !== undefined) {
+            subSection.title = title
+        }
+
+        if(description !== undefined) {
+            subSection.description = description
+        }
+
+        if(req.files && req.files.videoFile !== undefined) {
+            const video = req.files.videoFile
+            const updatedVideo = await uploadImageToCloudinary(video, process.env.FOLDER_NAME);
+
+            subSection.videoUrl = updatedVideo.secure_url
+            subSection.timeDuration = `${updatedVideo.duration}`
+        }
+
+        await subSection.save()
+
+        const updatedSection = await Section.findById(sectionId).populate("subSection")
 
         return res.json({
-            updatedSS:updatedSubsection,
+            updatedSubsection:subSection,
+            updatedSection:updatedSection,
             success:true,
             message:'Subsection updated successfully.'
         })

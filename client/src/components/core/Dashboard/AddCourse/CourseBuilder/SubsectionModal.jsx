@@ -56,13 +56,19 @@ const SubsectionModal = (
         formData.append('description', currentValues.lectureDesc)
     
     if(currentValues.lectureVideo !== modalData.videoUrl)
-        formData.append('video', currentValues.lectureVideo)
-    
+        formData.append('videoFile', currentValues.lectureVideo)
+
     setLoading(true)
     const result = await updateSubSection(formData, token)
 
     if(result) {
-        dispatch(setCourse(result))
+        const updatedCourseContent = course.courseContent.map(
+        (section) => 
+                section._id === modalData.sectionId ? result : section
+        )
+        const updatedCourse = {...course, courseContent: updatedCourseContent}
+
+        dispatch(setCourse(updatedCourse))
     }
 
     setModalData(null)
@@ -75,11 +81,13 @@ const SubsectionModal = (
 
     //edit subsection
     if(edit) {
-        if(!isFormUpdated) {
+        if(!isFormUpdated()) {
             toast.error('No changes made to the form.')
         }
-    } else {
-        handleEditSubSection()
+        else {
+            handleEditSubSection()
+        }
+        return
     }
 
     //add subsection
@@ -161,12 +169,19 @@ const SubsectionModal = (
                     {...register('lectureDesc', {required:true})}
                     className="w-full min-h-[130px]"
                 />
+                {
+                    errors.lectureDesc && (
+                        <span>
+                            Lecture Description is required
+                        </span>
+                    )
+                }
             </div>
             {
                 !view && (
                     <div>
                         <IconBtn
-                            text={loading ? 'Loading...' : edit ? 'Save Changes' : 'Save'}
+                            text={loading ? 'Saving...' : edit ? 'Save Changes' : 'Save'}
                         />
                     </div>
                 ) 

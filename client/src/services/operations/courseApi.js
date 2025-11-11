@@ -203,11 +203,11 @@ console.log(result)
     return result
 }
 
-export async function  updateSubSection(data, token) {
+export async function updateSubSection(data, token) {
     let result = null 
     const toastId = toast.loading('Loading...')
     try {
-        const response = await apiConnector('POST', UPDATE_SUBSECTION_API, data,
+        const response = await apiConnector('PUT', UPDATE_SUBSECTION_API, data,
             {
                 Authorization: `Bearer ${token}`
             }
@@ -218,7 +218,7 @@ export async function  updateSubSection(data, token) {
             throw new Error('Could not edit subsection.')
         }
 
-        result = response?.data?.data
+        result = response?.data?.updatedSection
         toast.success('Subsection edited successfully.')
 
     } catch (err) {
