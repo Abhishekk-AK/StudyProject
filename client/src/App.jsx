@@ -16,7 +16,7 @@ import OpenRoute from "./components/core/Auth/OpenRoute";
 import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
 import Cart from './components/core/Dashboard/Cart/index'
 import { ACCOUNT_TYPE } from "./utils/constants";
-import CourseInfoForm from "./components/core/Dashboard/AddCourse/CourseInfo/CourseInfoForm";
+import AddCourse from "./components/core/Dashboard/AddCourse";
 
 
 function App() {
@@ -99,7 +99,7 @@ function App() {
           //user?.accountType ===
            ACCOUNT_TYPE.INSTRUCTOR && (
             <>
-              <Route path="dashboard/add-courses" element={<CourseInfoForm/>} />
+              <Route path="dashboard/add-courses" element={<AddCourse/> } />
             </>
           )
          }

@@ -123,7 +123,7 @@ const SubsectionModal = (
                 {view && 'Viewing'} {add && 'Adding New'} {edit && 'Editing'} Lecture
             </p>
             <button
-                onClick={() => (!loading ? setModalData(null) : {})}
+                onClick={() => (setModalData(null))}
             >
                 <RxCross1/>
             </button>

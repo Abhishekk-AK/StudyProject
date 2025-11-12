@@ -66,7 +66,7 @@ const Upload = (
         {
           previewSource 
           ? (
-            <div>
+            <div className="flex flex-col justify-center items-center">
               {
                 !video 
                 ? (
@@ -77,7 +77,7 @@ const Upload = (
                   />
                 )
                 : (
-                  <ReactPlayer playsInline width={16} height={9} src={previewSource} />
+                  <ReactPlayer width="80%" height="50%"  src={previewSource} className="aspect-video object-cover" />
                 )
               }
               {
