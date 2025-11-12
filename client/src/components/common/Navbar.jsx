@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import ProfileDropdown from '../core/Auth/ProfileDropdown'
 import { useEffect, useState } from 'react'
-import { apiConnector } from '../../services/apiConnector'
 import { IoIosArrowDropdownCircle } from 'react-icons/io'
 import { fetchCourseCategories } from '../../services/operations/courseApi'
 
@@ -41,7 +40,10 @@ const Navbar = () => {
     }
 
   return (
-    <div className="flex items-center justify-center border-b border-b-richblack-700 ">
+    <div className={`flex items-center justify-center border-b border-b-richblack-700
+                      ${location.pathname !== '/' ? 'bg-richblack-800' : ''}
+                      transition-all duration-200
+    `}>
       <div className="flex w-11/12 max-w-max-content items-center justify-between">
 
         <Link to={'/'}>
@@ -56,30 +58,57 @@ const Navbar = () => {
                         {
                         link.title === 'Catalog' 
                         ? (
-                            <div className='flex items-center gap-2 group relative hover:cursor-pointer'>
-                              <p>{link.title}</p>
-                              <IoIosArrowDropdownCircle/>
+                            <>
+                              <div className={`flex items-center gap-2 group relative hover:cursor-pointer
+                                              ${matchRoute('/catalog/:catalogName')
+                                                ? 'text-yellow-25'
+                                                : 'text-richblack-25'
+                                                }
+                                            `}>
+                                <p>{link.title}</p>
+                                <IoIosArrowDropdownCircle/>
 
-                              <div className='invisible z-10 absolute left-[50%] top-[0%] translate-x-[-51%] translate-y-[25%] flex flex-col rounded-md bg-richblack-5 p-4 text-richblack-900 transition-all duration-200 group-hover:visible lg:w-[300px]'>
-                                
-                                <div className='absolute left-[50%] translate-x-[80%] translate-y-[-45%] top-0 h-6 w-6 rotate-45 rounded bg-richblack-5'>
+                                <div className='invisible z-10 absolute left-[50%] top-[0%] translate-x-[-51%] translate-y-[25%] flex flex-col rounded-md bg-richblack-5 p-4 text-richblack-900 transition-all duration-200 group-hover:visible lg:w-[300px]'>
+                                  
+                                  <div className='absolute left-[50%] translate-x-[80%] translate-y-[-45%] top-0 h-6 w-6 rotate-45 rounded bg-richblack-5'>
+                                  </div>
+
+                                  {
+                                    loading
+                                    ? 
+                                      <>Loading...</>
+                                    :
+                                      subLinks.length
+                                      ? (
+                                        <>
+                                          {
+                                            subLinks?.filter(
+                                              (subLink) => subLink?.courses?.length > 0
+                                            )
+                                            ?.map(
+                                              (subLink, index) => (
+                                                <Link
+                                                key={index}
+                                                  to={`/catalog/${subLink.name.split(' ').join('-').toLowerCase()}`}
+                                                  className='rounded-lg bg-transparent py-4 pl-4 hover:bg-richblack-50'
+                                                >
+                                                  <p>
+                                                    {subLink.name}
+                                                  </p>
+                                                </Link>
+                                              )
+                                            )
+                                          }
+                                        </>
+                                      )                                    
+                                      : (
+                                        <></>
+                                      )
+                                  }
                                 </div>
-
-                                {
-                                  subLinks.length
-                                  ? (
-                                    subLinks.map( (subLink, index) => (
-                                      <Link to={`${subLink.link}`} key={index}>
-                                        <p>{subLink.name}</p>
-                                      </Link>
-                                    ))
-                                  )
-                                  : (
-                                    <></>
-                                  )
-                                }
                               </div>
-                            </div>
+                            </>
+                            
                           ) 
                         : (
                             <Link to={link?.path}>
