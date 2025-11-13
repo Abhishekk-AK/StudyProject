@@ -36,7 +36,8 @@ exports.createCategory = async (req, res) => {
 
 exports.showAllCategorys = async (req, res) => {
     try {
-        const allCategorys = await Category.find({}, {name:true, description:true});
+        const allCategorys = await Category.find({}, {name:true, description:true})
+                                            .populate('courses', 'category courseName')
 
         //if no category found
         if(allCategorys.length === 0) {
@@ -65,7 +66,7 @@ exports.showAllCategorys = async (req, res) => {
 
 exports.categoryPageDetails = async (req, res) => {
     try {
-        const {categoryId} = req.body;
+        const {categoryId} = req.query;
 
         if(!categoryId) {
             return res.status(400).json({
@@ -75,9 +76,14 @@ exports.categoryPageDetails = async (req, res) => {
         }
 
         //get all courses for the specified category
-        const selectedCategory = await Category.findById(categoryId).populate("courses");
+        const selectedCategory = await Category.findById(categoryId)
+                                                .populate({
+                                                    path: 'courses',
+                                                    //match: {status: 'Published'},
+                                                    populate: 'ratingAndReviews'
+                                                });
 
-        console.log(selectedCategory);
+        //console.log(selectedCategory);
 
         if(!selectedCategory) {
             return res.status(404).json({
@@ -88,8 +94,8 @@ exports.categoryPageDetails = async (req, res) => {
 
         //if ther is no courses in the category
         if(selectedCategory.courses.length === 0) {
-            return res.status(200).json({
-                success:true,
+            return res.status(404).json({
+                success:false,
                 hasData:false,
                 message:'No courses found for the selected category.'
             })
@@ -99,20 +105,38 @@ exports.categoryPageDetails = async (req, res) => {
         const differentCategories = await Category.find({
                                                         _id: {$ne: categoryId}
                                                     })
-                                                    .populate("courses")
-
+                                                    .populate({
+                                                        path: 'courses',
+                                                        //match: {status: 'Published'},
+                                                        populate: 'ratingAndReviews'
+                                                    });
+                                                    
         //top selling courses in categories
-        const allCategories = await Category.find().populate('courses');
+        const allCategories = await Category.find().populate({
+                                                        path: 'courses',
+                                                        //match: {status: 'Published'},
+                                                        populate: 'ratingAndReviews',
+                                                        populate: {
+                                                            path: 'instructor'
+                                                        }
+                                                    });
+
         const allCourses = allCategories.flatMap((category) => category.courses);
         const mostSellingCourses = allCourses
                                     .sort((a,b) => b.sold-a.sold)
                                     .slice(0,10)
+
+        const mostSellingCoursesInCategory = selectedCategory.courses
+                                    .sort((a,b) => b.sold-a.sold)
+                                    .slice(5,15)
+                                    
 
         //return response
         return res.status(200).json({
             selectedCategory: selectedCategory,
             differentCategories: differentCategories,
             mostSellingCourses: mostSellingCourses,
+            mostSellingCoursesInCategory: mostSellingCoursesInCategory,
             success:true,
             message:'Category detail page working successfully.'
         })

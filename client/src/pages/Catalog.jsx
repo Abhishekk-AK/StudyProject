@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { apiConnector } from "../services/apiConnector"
 import { categoryEndpoints } from "../services/apis"
-import { getCatalogPageData } from "../services/operations/pageAndComponentData"
+import { getCatalogPageData } from "../services/operations/categoryApi"
 import CourseSlider from "../components/core/Catalog/CourseSlider"
 import Course_Card from "../components/core/Catalog/Course_Card"
 
@@ -91,7 +91,7 @@ const Catalog = () => {
                     Top Courses in {catalogPageData?.selectedCategory?.name}
                 </div>
                 <div>
-                    <CourseSlider courses={catalogPageData?.differentCategory?.name} />
+                    <CourseSlider courses={catalogPageData?.mostSellingCoursesInCategory} />
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@ const Catalog = () => {
             <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                     {
-                        catalogPageData?.mostSellingCourses?.slice(0,4)
+                        catalogPageData?.mostSellingCoursesInCategory?.slice(0,6)
                         .map((course, index) => (
                             <Course_Card course={course} key={index} Height={'h-[300px]'}/>
                         ))

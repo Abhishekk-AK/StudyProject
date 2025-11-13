@@ -22,7 +22,8 @@ export const contactUsEndpoint = {
 
 //categories
 export const categoryEndpoints = {
-    CATEGORIES_API: BASE_URL + '/category/all'
+    CATEGORIES_API: BASE_URL + '/category/all',
+    CATEGORY_PAGE_API: BASE_URL + '/category/detail'
 }
 
 //course
