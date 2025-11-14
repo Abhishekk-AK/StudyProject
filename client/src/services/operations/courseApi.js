@@ -9,6 +9,7 @@ const {
 const {
     ADDCOURSE_API,
     EDITCOURSE_API,
+    COURSE_DETAILS_API,
     CREATE_SECTION_API,
     UPDATE_SECTION_API,
     DELETE_SECTION_API,
@@ -90,6 +91,28 @@ export async function editCourseDetails(data, token) {
 
     } catch (err) {
         console.log("Edit COURSE API ERROR...", err)
+        toast.error(err.message)
+    }
+    toast.dismiss(toastId)
+    return result
+}
+
+export async function fetchCourseDetails(courseId) {
+    let result = null
+    const toastId = toast.loading('Loading...')
+    try {
+        const response = await apiConnector('GET', COURSE_DETAILS_API, {courseId})
+        console.log(response)
+
+        if(!response) {
+            throw new Error(response.data.message)
+        }
+
+        result = response?.data?.data
+        toast.success('Course deatils fetched successfully.')
+
+    } catch (err) {
+        console.log('Fetch course API error:', err)
         toast.error(err.message)
     }
     toast.dismiss(toastId)
