@@ -37,3 +37,10 @@ export const courseEndpoints = {
     UPDATE_SUBSECTION_API: BASE_URL + '/category/course/section/subSection/update',
     DELETE_SUBSECTION_API: BASE_URL + '/category/course/section/subSection/delete'
 }
+
+//student
+export const studentEndpoints = {
+    COURSE_PAYMENT_API: BASE_URL + '/payment/capture',
+    COURSE_VERIFY_API: BASE_URL + '/payment/verify',
+    SEND_PAYMENT_SUCCESS_EMAIL_API: BASE_URL + '/payment/success-email'
+}
