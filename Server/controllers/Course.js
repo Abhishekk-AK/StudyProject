@@ -151,7 +151,7 @@ exports.showAllCourses = async (req, res) => {
 //get courseDetails
 exports.getCourseDetails = async (req, res) => {
     try {
-        const {courseId} = req.body;
+        const {courseId} = req.query;
 
         if(!courseId) {
             return res.status(400).json({
@@ -196,7 +196,9 @@ exports.getCourseDetails = async (req, res) => {
         return res.status(200).json({
             success:true,
             message:'Course details fetched successfully.',
-            data:courseDetails
+            data:{
+                courseDetails
+            }
         })
 
     } catch (err) {
