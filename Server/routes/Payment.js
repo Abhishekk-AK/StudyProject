@@ -11,8 +11,8 @@ const {
     isStudent 
 } = require('../middlewares/auth');
 
-router.get('/capture', auth, isStudent, capturePayment);
-router.get('/verify', verifyPayment);
-router.post('/success-email', sendPaymentSuccessEmail)
+router.post('/capture', auth, isStudent, capturePayment);
+router.post('/verify', auth, isStudent, verifyPayment);
+router.post('/success-email', auth, isStudent, sendPaymentSuccessEmail)
 
 module.exports = router;

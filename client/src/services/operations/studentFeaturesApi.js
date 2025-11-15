@@ -3,6 +3,7 @@ import { apiConnector } from "../apiConnector"
 import { studentEndpoints } from "../apis"
 import { setPaymentLoading } from '../../slices/CourseSlice'
 import { resetCart } from "../../slices/CartSlice"
+import rzpLogo from '../../assets/TimeLineLogo/Logo2.svg'
 const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY
 
 const {
