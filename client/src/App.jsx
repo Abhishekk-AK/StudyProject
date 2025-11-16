@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router";
 import Home from "./pages/Home";
 import Navbar from "./components/common/Navbar";
@@ -19,16 +18,14 @@ import { ACCOUNT_TYPE } from "./utils/constants";
 import AddCourse from "./components/core/Dashboard/AddCourse";
 import Catalog from "./pages/Catalog";
 import CourseDetails from "./pages/CourseDetails";
+import ViewCourse from "./pages/ViewCourse";
+import VideoDetails from "./components/core/ViewCourse/VideoDetails";
+import { useSelector } from "react-redux";
 
 
 function App() {
-  const [data, setData] = useState(null);
 
-  useEffect(() => {
-    fetch("/") // ✅ thanks to Vite proxy
-      .then((res) => res.json())
-      .then((json) => setData(json));
-  }, []);
+  const { user } = useSelector((state) => state.profile) 
 
   return (
     <div className="w-screen min-h-screen bg-richblack-900 flex flex-col font-inter">  
@@ -91,8 +88,7 @@ function App() {
          <Route path="dashboard/my-profile" element={<MyProfile/>} /> 
          
          {
-          //user?.accountType ===
-           ACCOUNT_TYPE.STUDENT && (
+          user?.accountType === ACCOUNT_TYPE.STUDENT && (
             <>
               <Route path="dashboard/enrolled-courses" element={<EnrolledCourses/>} />
               <Route path="dashboard/cart" element={<Cart/>} />
@@ -100,13 +96,31 @@ function App() {
           )
          }
          {
-          //user?.accountType ===
-           ACCOUNT_TYPE.INSTRUCTOR && (
+          user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
             <>
               <Route path="dashboard/add-courses" element={<AddCourse/> } />
             </>
           )
          }
+        </Route>
+
+        <Route
+          element={
+            <PrivateRoute>
+              <ViewCourse/>
+            </PrivateRoute>
+          }
+        >
+          {
+            user?.ACCOUNT_TYPE === ACCOUNT_TYPE.STUDENT && (
+              <>
+                <Route
+                  path="view-course/:courseId/section/:sectionId/sub-section/:subSectionId"
+                  element={<VideoDetails/>}
+                />
+              </>
+            )
+          }
         </Route>
       </Routes>
     </div>
