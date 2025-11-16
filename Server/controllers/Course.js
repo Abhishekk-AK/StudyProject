@@ -1,6 +1,7 @@
 const Course = require('../models/Course');
 const Category = require('../models/Category');
 const User = require('../models/User');
+const CourseProgress = require('../models/CourseProgress')
 const {uploadImageToCloudinary} = require('../utils/imageUploader');
 
 //createCourse handler function
@@ -198,6 +199,94 @@ exports.getCourseDetails = async (req, res) => {
             message:'Course details fetched successfully.',
             data:{
                 courseDetails
+            }
+        })
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success:false,
+            message:'Something went wrong while getting course details.'
+        })
+    }
+}
+
+//get authenticated course details
+exports.getFullCourseDetails = async (req, res) => {
+    try {
+        const {courseId} = req.body
+        const userId = req.user.id
+
+        if(!courseId) {
+            return res.status(400).json({
+                success:false,
+                message:'Course id required.'
+            })
+        }
+
+        const courseDetails = await Course.findById(courseId, 
+                                                {
+                                                // _id: 0,
+                                                // courseName: 1,
+                                                // courseDescription:1,
+                                                // instructor: 1,
+                                                // whatYouWillLearn: 1,
+                                                // courseContent: 1,
+                                                // rating: 1,
+                                                // price: 1,
+                                                // thumbnail: 1,
+                                                // tag: 1,
+                                                // category: 1,
+                                                // studentsEnrolled: 1
+                                                }
+                                            )
+                                            .populate("instructor", "firstName lastName image")
+                                            .populate("ratingAndReviews")
+                                            .populate("category", "name")
+                                            .populate({
+                                                path:"courseContent",
+                                                populate:{
+                                                    path:"subSection"
+                                                }
+                                            });
+
+        if(!courseDetails) {
+            return res.status(400).json({
+                success:false,
+                message:`Course not found with this ${courseId}.`
+            })
+        }
+
+        //count course progress
+        let courseProgressCount = await CourseProgress.findOne(
+                                                                {
+                                                                    courseID: courseId,
+                                                                    userId: userId
+                                                                }
+                                                            )
+
+        console.log('courseProgressCount', courseProgressCount)
+
+        //find total time duration
+        let totalDurationInSeconds = 0
+        courseDetails.courseContent.forEach((section) => {
+            section.subSection.forEach((subSection) => {
+                const timeDurationInSeconds = parseInt(subSection.timeDuration)
+                totalDurationInSeconds += timeDurationInSeconds
+            })
+        })
+
+        const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
+
+        return res.status(200).json({
+            success:true,
+            message:'Course details fetched successfully.',
+            data:{
+                courseDetails,
+                totalDuration,
+                completedVideos: courseProgressCount?.completedVideos
+                                    ? courseProgressCount?.completedVideos
+                                    : []
             }
         })
 
