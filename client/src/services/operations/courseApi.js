@@ -101,7 +101,7 @@ export async function fetchCourseDetails(courseId) {
     let result = null
     const toastId = toast.loading('Loading...')
     try {
-        const response = await apiConnector('GET', COURSE_DETAILS_API, {courseId})
+        const response = await apiConnector('GET', `${COURSE_DETAILS_API}?courseId=${courseId}`)
         console.log(response)
 
         if(!response) {

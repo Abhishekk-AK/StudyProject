@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import copy from 'copy-to-clipboard'
 import toast from "react-hot-toast"
 import { addToCart } from "../../../slices/CartSlice"
+import { ACCOUNT_TYPE } from "../../../utils/constants"
 
 const CourseDetailsCard = (
     {course, setConfirmationModal, handleBuyCourse}
@@ -22,6 +23,7 @@ const CourseDetailsCard = (
     const handleAddToCart = () => {
         if(user && user.accountType === ACCOUNT_TYPE.INSTRUCTOR) {
             toast.error(`You are an instructor, you can't buy a course.`)
+            return
         }
         if(token) {
             dispatch(addToCart(course))
@@ -57,7 +59,7 @@ const CourseDetailsCard = (
                 onClick={
                     user && course?.studentsEnrolled.includes(user?._id)
                     ? () => navigate('/dashboard/enrolled-courses')
-                    : () => handleBuyCourse
+                    : handleBuyCourse
                 }
                 className="bg-yellow-50 text-richblack-900"
             >
@@ -70,7 +72,7 @@ const CourseDetailsCard = (
             </button>
 
             {
-                (user && !course?.studentsEnrolled.includes(user?._id)) && (
+                (!user || !course?.studentsEnrolled.includes(user?._id)) && (
                     <button
                         onClick={handleAddToCart}
                         className="bg-yellow-50 text-richblack-900"

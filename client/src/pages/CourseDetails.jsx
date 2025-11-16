@@ -29,7 +29,7 @@ const CourseDetails = () => {
   useEffect(() => {
     const getCourseFullDetails = async () => {
       try {
-        const result = fetchCourseDetails(courseId)
+        const result = await fetchCourseDetails(courseId)
         setCourseData(result)
 
       } catch (err) {
@@ -40,19 +40,28 @@ const CourseDetails = () => {
   },[courseId])
 
   useEffect(() => {
-    const count = GetAverageRating(courseData.data.courseDetails.ratingAndReviews)
+    if (!courseData) return
+    console.log("Updated courseData:", courseData)
+  }, [courseData])
+
+  useEffect(() => {
+    const count = GetAverageRating(courseData?.courseDetails?.ratingAndReviews)
     setAvgReviewCount(count)
+    console.log(count)
   },[courseData])
 
   useEffect(() => {
     let lectures = 0
-    courseData.data.courseDetails.courseContent.forEach((sec) => {
+    courseData?.courseDetails?.courseContent.forEach((sec) => {
       lectures += sec.subSection.length || 0
     })
 
     setTotalNoOfLectures(lectures)
   },[courseData])
 
+  if (!courseData) {
+  return <div>Coursedata not received.</div>;
+}
 
   const handleActive = (id) => {
     setIsActive(
@@ -72,12 +81,13 @@ const CourseDetails = () => {
     setConfirmationModal({
       text1:'You are not logged in.',
       text2:'Please log in to purchase the course.',
-      btn1:'Login',
-      btn2:'Cancel',
+      btn1Text:'Login',
+      btn2Text:'Cancel',
       btn1Handler:() => navigate('/login'),
-      btn2handler:() => setConfirmationModal(null)
+      btn2Handler:() => setConfirmationModal(null)
     })
   }
+
 
   if(loading || !courseData) {
     return (
@@ -87,7 +97,7 @@ const CourseDetails = () => {
     )
   }
 
-  if(!courseData.success) {
+  if(!courseData) {
     return (
       <div>
         <Error/>
@@ -107,11 +117,10 @@ const CourseDetails = () => {
     createdAt,
     courseContent,
     price
-  } = courseData.data.courseDetails
-
+  } = courseData?.courseDetails
 
   return (
-    <div className="flex">
+    <div className=" text-richblack-5">
       <div className="relative flex flex-col justify-start">
         <div>
           {courseName}
@@ -148,7 +157,7 @@ const CourseDetails = () => {
 
       <div>
         <CourseDetailsCard
-          course={courseData.data.courseDetails}
+          course={courseData?.courseDetails}
           setConfirmationModal={setConfirmationModal}
           handleBuyCourse={handleBuyCourse}
         />
@@ -178,7 +187,7 @@ const CourseDetails = () => {
               {totalNoOfLectures} lectures(s)
             </span>
             <span>
-              {courseData.data.totalDuration} Total length
+              {/* {courseData.data.totalDuration} Total length */}
             </span>
           </div>
           <div>
@@ -192,7 +201,7 @@ const CourseDetails = () => {
       </div>
 
       {
-        confirmationModal && <ConfirmationModal modaldata={confirmationModal} />
+        confirmationModal && <ConfirmationModal modalData={confirmationModal} />
       }
     </div>
   )
