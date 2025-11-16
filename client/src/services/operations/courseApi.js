@@ -15,7 +15,8 @@ const {
     DELETE_SECTION_API,
     CREATE_SUBSECTION_API,
     UPDATE_SUBSECTION_API,
-    DELETE_SUBSECTION_API
+    DELETE_SUBSECTION_API,
+    GET_AUTHENTICATED_COURSE_DETAILS_API
 } = courseEndpoints
 
 export async function fetchCourseCategories() {
@@ -273,6 +274,35 @@ export async function deleteSubSection(data, token) {
     } catch (err) {
         console.log('Error in deleting subsection:', err)
         toast.error(err.message)
+    }
+    toast.dismiss(toastId)
+    return result
+}
+
+//get authenticated course details
+export async function getFullDetailsCourse(courseId, token) {
+    const toastId = toast.loading('Loading...')
+    let result = null
+
+    try {
+        const response = await apiConnector('POST', GET_AUTHENTICATED_COURSE_DETAILS_API,
+            {courseId},
+            {
+                Authorization: `Bearer ${token}`
+            }
+        )
+        console.log('Authenticated course response:', response)
+
+        if(!response.data.success) {
+            throw new Error(response.data.message)
+        }
+
+        result = response?.data?.data
+
+    } catch (err) {
+        console.log('Authenticated Course API error:', err)
+        result = err.response.data
+        toast.error('Authenticated Course API error')
     }
     toast.dismiss(toastId)
     return result
