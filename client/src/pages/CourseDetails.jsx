@@ -9,6 +9,7 @@ import RatingStars from "../components/common/RatingStars"
 import { formatDate } from "../services/formatDate"
 import CourseDetailsCard from "../components/core/Course/CourseDetailsCard"
 import ConfirmationModal from "../components/common/ConfirmationModal"
+import SectionAccordion from "../components/core/Course/SectionAccordion"
 
 const CourseDetails = () => {
 
@@ -178,7 +179,7 @@ const CourseDetails = () => {
             Course Content
           </p>
         </div>
-        <div>
+        <div className="flex justify-between">
           <div>
             <span>
               {courseContent.length} section(s)
@@ -197,6 +198,43 @@ const CourseDetails = () => {
               Collapse all Sections
             </button>
           </div>
+        </div>
+
+        {/* section subsection accordion */}
+        <div>
+          {
+            courseContent?.map((section) => (
+              <SectionAccordion
+                section={section}
+                key={section._id}
+                isActive={isActive}
+                handleActive={handleActive}
+              />
+            ))
+          }
+        </div>
+
+        <div>
+          <p>
+            Author
+          </p>
+          <div>
+            <img
+              src={
+                instructor.image
+                ? instructor.image
+                : `https://api.dicebear.com/5.x/initials/svg?seed=${instructor.firstName}${instructor.lastName}`
+              }
+              alt="Author Image"
+              className="w-14 h-14 rounded-full object-cover"
+            />
+            <p>
+              {`${instructor.firstName} ${instructor.lastName}`}
+            </p>
+          </div>
+          <p>
+            {instructor?.additionalDetails?.about}
+          </p>
         </div>
       </div>
 
