@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { getUserEnrolledCourses } from "../../../services/operations/profileApi";
+import { useNavigate } from "react-router-dom";
+import ProgressBar from '@ramonak/react-progress-bar'
 
 const EnrolledCourses = () => {
+
+  const navigate = useNavigate()
 
   const {token} = useSelector((state) => state.auth);
 
@@ -51,8 +55,17 @@ const EnrolledCourses = () => {
 
               {
                 enrolledCourses.map((course, index) => (
-                  <div>
-                    <div>
+                  <div
+                    key={index}
+                    className={``}
+                  >
+                    <div
+                      onClick={() => {
+                        navigate(
+                          `/view-course/${course?._id}/section/${course.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`
+                        )
+                      }}
+                    >
                       <img src={course.thumbnail}/>
                       <div>
                         <p>{course.courseName}</p>
