@@ -7,6 +7,8 @@ const { createCourse, showAllCourses, getCourseDetails, getFullCourseDetails } =
 const { createSection, updateSection, deleteSection } = require('../controllers/Section');
 const { createSubSection, updateSubsection, deleteSubSection } = require('../controllers/SubSection');
 const { createRatingAndReview, getALLRatingAndReview, averageRating } = require('../controllers/RatingAndReview');
+const { updateCourseProgress } = require('../controllers/CourseProgress');
+const { getEnrolledCourses } = require('../controllers/Profile');
 
 router.post('/create', auth, isAdmin, createCategory);
 router.get('/detail', categoryPageDetails);
@@ -15,7 +17,9 @@ router.get('/all', showAllCategorys);
 router.post('/course/create', auth, isInstructor, createCourse);
 router.get('/course/detail', getCourseDetails);
 router.get('/course/all', showAllCourses);
+
 router.post('/course/authenticated/detail', auth, getFullCourseDetails);
+router.post('/course/progress/update', auth, isStudent, updateCourseProgress);
 
 router.post('/course/section/create', auth, isInstructor, createSection);
 router.put('/course/section/update', auth, isInstructor, updateSection);
