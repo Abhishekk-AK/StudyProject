@@ -16,6 +16,7 @@ const {
     CREATE_SUBSECTION_API,
     UPDATE_SUBSECTION_API,
     DELETE_SUBSECTION_API,
+    LECTURE_COMPLETION_API,
     GET_AUTHENTICATED_COURSE_DETAILS_API
 } = courseEndpoints
 
@@ -303,6 +304,34 @@ export async function getFullDetailsCourse(courseId, token) {
         console.log('Authenticated Course API error:', err)
         result = err.response.data
         toast.error('Authenticated Course API error')
+    }
+    toast.dismiss(toastId)
+    return result
+}
+
+//mark lecture as complete
+export async function markLectureAsComplete(data, token) {
+    let result = null
+    const toastId = toast.loading('Loading...')
+    try {
+        const response = await apiConnector('POST', LECTURE_COMPLETION_API, data,
+            {
+                Authorization: `Bearer ${token}`
+            }
+        )
+        console.log('Mark lecture complete response:', response)
+
+        if(!response.data.success) {
+            throw new Error(response.data.error)
+        }
+
+        result = true
+        toast.success('Lecture completed')
+
+    } catch (err) {
+        console.log('Mark lecture complete API error:', err)
+        toast.error(`Couldn't marked as complete`)
+        result = false
     }
     toast.dismiss(toastId)
     return result
