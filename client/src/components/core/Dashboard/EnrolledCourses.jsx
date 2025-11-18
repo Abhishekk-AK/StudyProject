@@ -62,7 +62,7 @@ const EnrolledCourses = () => {
                     <div
                       onClick={() => {
                         navigate(
-                          `/view-course/${course?._id}/section/${course.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`
+                          `/view-course/${course?._id}/section/${course.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection[0]}`
                         )
                       }}
                     >
