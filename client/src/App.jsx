@@ -21,6 +21,7 @@ import CourseDetails from "./pages/CourseDetails";
 import ViewCourse from "./pages/ViewCourse";
 import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import { useSelector } from "react-redux";
+import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor";
 
 
 function App() {
@@ -99,6 +100,7 @@ function App() {
           user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
             <>
               <Route path="dashboard/add-courses" element={<AddCourse/> } />
+              <Route path="dashboard/instructor" element={<Instructor/> } />
             </>
           )
          }
