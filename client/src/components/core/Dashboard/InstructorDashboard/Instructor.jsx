@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import InstructorChart from "./InstructorChart"
 import { Link } from 'react-router-dom'
+import { getInstructorData } from "../../../../services/operations/profileApi"
+import { fetchInstructorCourses } from "../../../../services/operations/courseApi"
 
 const Instructor = () => {
 
@@ -17,11 +19,11 @@ const Instructor = () => {
             const instructorAPIData = await getInstructorData(token)
             const result = await fetchInstructorCourses(token)
 
-            if(instructorAPIData.length)
+            if(instructorAPIData?.length)
                 setInstructorData(instructorAPIData)
 
             if(result)
-                setCourses(result)
+                setCourses(result?.courses)
 
             setLoading(false)
         }
@@ -101,7 +103,7 @@ const Instructor = () => {
                                             </p>
                                             <div>
                                                 <p>
-                                                    {course.studentsEnrolled.length} Students
+                                                    {course.studentsEnrolled.length} Student(s)
                                                 </p>
                                                 <p> | </p>
                                                 <p>

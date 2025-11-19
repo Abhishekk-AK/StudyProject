@@ -11,7 +11,9 @@ const InstructorChart = ({courses}) => {
     const getRandomColors = (noOfColors) => {
         const colors = []
         for(let i=0; i<noOfColors; i++) {
-            const color = `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`
+            const color = `rgb(${Math.floor(Math.random()*256)}, 
+                                ${Math.floor(Math.random()*256)}, 
+                                ${Math.floor(Math.random()*256)})`
             colors.push(color)
         }
         return colors
@@ -53,7 +55,7 @@ const InstructorChart = ({courses}) => {
         <button
             onClick={() => setCurrChart('Students')}
         >
-            Student
+            Students
         </button>
         <button
             onClick={() => setCurrChart('Income')}
