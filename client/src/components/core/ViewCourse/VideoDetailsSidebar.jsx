@@ -40,7 +40,7 @@ const VideoDetailsSidebar = ({setReviewModal}) => {
     
 
   return (
-    <>
+    <div className="text-richblack-5 bg-richblack-700 w-[230px]">
         <div>
             <div>
                 {/* buttons */}
@@ -78,6 +78,11 @@ const VideoDetailsSidebar = ({setReviewModal}) => {
                         <div
                             key={section._id}
                             onClick={() => setActiveStatus(section?._id)}
+                            className={` bg-richblack-500
+                                ${
+                                    activeStatus === section?._id ? 'bg-richblack-200' : ''
+                                }
+                            `}
                         >
                             <div>
                                 {section?.sectionName}
@@ -94,7 +99,7 @@ const VideoDetailsSidebar = ({setReviewModal}) => {
                                                 ${
                                                     videobarActive === topic._id
                                                     ? 'bg-yellow-200 text-richblack-900'
-                                                    : 'bg-richblack-900 text-richblack-5'
+                                                    : 'bg-richblack-800 text-richblack-5'
                                                 }
                                             `}
                                             onClick={() => {
@@ -126,7 +131,7 @@ const VideoDetailsSidebar = ({setReviewModal}) => {
                 }
             </div>
         </div>
-    </>
+    </div>
   )
 }
 

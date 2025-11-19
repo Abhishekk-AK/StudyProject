@@ -12,7 +12,7 @@ const VideoDetails = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
-  const playerRef = useRef()
+  const playerRef = useRef(null)
   const [videoData, setVideoData] = useState([])
   const [videoEnded, setVideoEnded] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -30,7 +30,7 @@ const VideoDetails = () => {
       if(!courseSectionData.length)
         return
 
-      if(!courseId && !sectionId && subSectionId) {
+      if(!courseId && !sectionId && !subSectionId) {
         navigate('/dashboard/enrolled-courses')
 
       } else {
@@ -153,31 +153,43 @@ const VideoDetails = () => {
     setLoading(false)
   }
 
+  const replayVideo = () => {
+    console.log('first')
+    playerRef.current.seekTo(0, 0);   // Go to start
+    console.log('second')
+  };
+
+
   return (
-    <>
+    <div className="text-richblack-5 relative">
       {
         !videoData 
         ? (
-          <div>
+          <div className="h-full w-full rounded-md object-cover">
             No Video Found
           </div>
         )
         : (
-          <ReactPlayer
-            ref={playerRef}
-            aspect-ratio='16:9'
-            playsInline
-            width="80%" 
-            height="50%"  
-            src={videoData?.videoUrl}
-            onEnded={() => setVideoEnded(true)}
-            className="aspect-video object-cover" 
-          >
-            <AiFillPlayCircle/>
+          <>
+            <ReactPlayer
+              ref={playerRef}
+              playsInline={false}
+              controls
+              style={{ width: '100%', height: 'auto', aspectRatio: '16/9' }}
+              onReady={() => console.log("Player ready", playerRef.current)}
+              playing={false}
+              src={videoData?.videoUrl}
+              onEnded={() => setVideoEnded(true)}
+              className="full absolute inset-0 grid h-full place-content-center font-inter"
+            />
 
+            <AiFillPlayCircle position="center" className="bg-yellow-50 text-red-500"/>
             {
               videoEnded && (
-                <div>
+                <div
+                  className="full absolute text-amber-400 inset-0 z-100 grid h-[80vh] place-content-center font-inter"
+                >
+                
                   {
                     !completedLectures.includes(subSectionId) && (
                       <IconBtn
@@ -190,12 +202,14 @@ const VideoDetails = () => {
 
                   <IconBtn
                     disabled={loading}
-                    onclick={() => {
-                      if(playerRef?.current) {
-                        playerRef?.current.seek(0)
-                        setVideoEnded(false)
-                      }
-                    }}
+                    // onclick={() => { replayVideo
+                    //   // if(playerRef?.current) {
+                    //   //   playerRef?.current.seek(0)
+                    //   //   setVideoEnded(false)
+                    //   // }
+                    // }}
+                    //
+                    onclick={replayVideo}
                     text={'Rewatch'}
                     customClasses={'text-xl'}
                   />
@@ -205,7 +219,7 @@ const VideoDetails = () => {
                       !isFirstVideo() && (
                         <button
                           disabled={loading}
-                          onclick={goToPreviousVideo}
+                          onClick={goToPreviousVideo}
                           className="blackButton"
                         >
                           Prev
@@ -216,7 +230,7 @@ const VideoDetails = () => {
                       !isLastVideo() && (
                         <button
                           disabled={loading}
-                          onclick={goToNextVideo}
+                          onClick={goToNextVideo}
                           className="blackButton"
                         >
                           Next
@@ -227,8 +241,7 @@ const VideoDetails = () => {
                 </div>
               )
             }
-
-          </ReactPlayer>
+          </>
         )
       }
       <h1>
@@ -237,7 +250,7 @@ const VideoDetails = () => {
       <p>
         {videoData?.description}
       </p>
-    </>
+    </div>
   )
 }
 

@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Outlet, useParams } from "react-router-dom"
-import { setCompletedLectures, setCourseEntireData, setCourseSectionData, setTotalNoOfLectures } from "../slices/ViewCourseSlice"
 import VideoDetailsSidebar from "../components/core/ViewCourse/VideoDetailsSidebar"
 import CourseReviewModal from "../components/core/ViewCourse/CourseReviewModal"
+import { getFullDetailsCourse } from '../services/operations/courseApi'
+import { 
+  setCompletedLectures, 
+  setCourseEntireData, 
+  setCourseSectionData, 
+  setTotalNoOfLectures 
+} from "../slices/ViewCourseSlice"
 
 const ViewCourse = () => {
     
@@ -32,7 +38,7 @@ const ViewCourse = () => {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex relative">
         <VideoDetailsSidebar setReviewModal={setReviewModal} />
 
         <div className="w-11/12 max-w-[1000px] py-10 mx-auto">

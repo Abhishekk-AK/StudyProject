@@ -3,6 +3,7 @@ const Category = require('../models/Category');
 const User = require('../models/User');
 const CourseProgress = require('../models/CourseProgress')
 const {uploadImageToCloudinary} = require('../utils/imageUploader');
+const { convertSecondsToDuration } = require('../utils/secondsToDuration');
 
 //createCourse handler function
 exports.createCourse = async (req, res) => {
