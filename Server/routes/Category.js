@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { auth, isAdmin, isInstructor, isStudent } = require('../middlewares/auth');
 const { createCategory, showAllCategorys, categoryPageDetails } = require('../controllers/Category');
-const { createCourse, showAllCourses, getCourseDetails, getFullCourseDetails } = require('../controllers/Course');
+const { createCourse, showAllCourses, getCourseDetails, getFullCourseDetails, getInstructorCourses } = require('../controllers/Course');
 const { createSection, updateSection, deleteSection } = require('../controllers/Section');
 const { createSubSection, updateSubsection, deleteSubSection } = require('../controllers/SubSection');
 const { createRatingAndReview, getALLRatingAndReview, averageRating } = require('../controllers/RatingAndReview');
@@ -20,6 +20,7 @@ router.get('/course/all', showAllCourses);
 
 router.post('/course/authenticated/detail', auth, getFullCourseDetails);
 router.post('/course/progress/update', auth, isStudent, updateCourseProgress);
+router.get('/instructor/courses', auth, isInstructor, getInstructorCourses);
 
 router.post('/course/section/create', auth, isInstructor, createSection);
 router.put('/course/section/update', auth, isInstructor, updateSection);

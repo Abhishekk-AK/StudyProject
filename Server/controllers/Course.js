@@ -299,3 +299,50 @@ exports.getFullCourseDetails = async (req, res) => {
         })
     }
 }
+
+
+//instructor courses
+exports.getInstructorCourses = async (req, res) => {
+    try {
+        const userId = req.user.id
+
+        if(!userId) {
+            return res.status(400).json({
+                success:false,
+                message:'Instructor Id is required.'
+            })
+        }
+
+        const instructor = await User.findById(userId)
+
+        if(!instructor) {
+            return res.status(400).json({
+                success:false,
+                message:'Instructor not found'
+            })
+        }
+
+        if(!instructor.accountType === 'Instructor') {
+            return res.status(400).json({
+                success:false,
+                message:'Not a valid Instructor.'
+            })
+        }
+
+        const instructorCourses = await User.findById(userId)
+                                    .populate('courses', 'courseName thumbnail price studentsEnrolled')
+
+        return res.status(200).json({
+            data:instructorCourses,
+            success:true,
+            message:'Instructor courses fetched successfully.'
+        })
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            success:false,
+            message:'Something went wrong while getting instructor courses.'
+        })
+    }
+}
