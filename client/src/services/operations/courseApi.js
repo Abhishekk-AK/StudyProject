@@ -16,6 +16,7 @@ const {
     CREATE_SUBSECTION_API,
     UPDATE_SUBSECTION_API,
     DELETE_SUBSECTION_API,
+    INSTRUCTOR_COURSES_API,
     LECTURE_COMPLETION_API,
     GET_AUTHENTICATED_COURSE_DETAILS_API
 } = courseEndpoints
@@ -362,6 +363,31 @@ export async function createRatingReviews(data, token) {
     } catch (err) {
         console.error('Create rating review API error:', err)
         toast.error(err.response.data.message ? err.response.data.message : 'Error in rating creation.')
+    }
+    toast.dismiss(toastId)
+    return result
+}
+
+//all instructor courses
+export async function fetchInstructorCourses(token) {
+    let result = null
+    const toastId = toast.loading('Loading...')
+    try {
+        const response = await apiConnector('GET', INSTRUCTOR_COURSES_API, null,
+            {
+                Authorization: `Bearer ${token}`
+            }
+        )
+        console.log('Get instructor courses response:', response)
+
+        if(!response.data.success)
+            throw new Error(response.data.message)
+
+        result = response?.data?.data
+        
+    } catch (err) {
+        console.error(err)
+        toast.error(`Couldn't get Instructor courses.`)
     }
     toast.dismiss(toastId)
     return result
