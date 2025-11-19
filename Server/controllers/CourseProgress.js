@@ -39,6 +39,11 @@ exports.updateCourseProgress = async (req, res) => {
         }
         await courseProgress.save()
 
+        return res.status(200).json({
+            success:true,
+            message:'Lecture marked as complete'
+        })
+
     } catch (err) {
         console.error(err)
         return res.status(500).json({

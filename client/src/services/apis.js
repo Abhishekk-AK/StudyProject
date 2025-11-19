@@ -37,6 +37,7 @@ export const courseEndpoints = {
     CREATE_SUBSECTION_API: BASE_URL + '/category/course/section/subSection/create',
     UPDATE_SUBSECTION_API: BASE_URL + '/category/course/section/subSection/update',
     DELETE_SUBSECTION_API: BASE_URL + '/category/course/section/subSection/delete',
+    LECTURE_COMPLETION_API: BASE_URL +'/category/course/progress/update',
     GET_AUTHENTICATED_COURSE_DETAILS_API: BASE_URL + '/category/course/authenticated/detail'
 }
 
