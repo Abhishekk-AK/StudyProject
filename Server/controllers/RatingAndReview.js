@@ -23,7 +23,7 @@ exports.createRatingAndReview = async (req, res) => {
                                     studentsEnrolled: {$elemMatch: {$eq: userId}},
                                 },
                             )
-        
+
         if(!courseDetails) {
             return res.status(404).json({
                 success:false,
@@ -40,7 +40,7 @@ exports.createRatingAndReview = async (req, res) => {
         if(alreadyReviewed) {
             return res.status(403).json({
                 success:false,
-                message:'Course is already reviewed by user.'
+                message:'You have already reviewed the course'
             })
         }
 
@@ -145,7 +145,7 @@ exports.getALLRatingAndReview = async (req,res) => {
                                         })
 
         return res.status(200).json({
-            allRatingAndReview:allRatingAndReview,
+            data:allRatingAndReview,
             success:true,
             message:'All rating and reviews fetched successfully.'
         })

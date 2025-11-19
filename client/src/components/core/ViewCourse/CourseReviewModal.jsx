@@ -3,6 +3,7 @@ import { useSelector } from "react-redux"
 import { useForm } from "react-hook-form"
 import ReactStars from "react-rating-stars-component"
 import IconBtn from "../../common/IconBtn"
+import { createRatingReviews } from "../../../services/operations/courseApi"
 
 
 const CourseReviewModal = ({setReviewModal}) => {
@@ -24,14 +25,14 @@ const CourseReviewModal = ({setReviewModal}) => {
     setValue('courseRating', 0)
   },[])
 
-  const ratingChanged = () => {
+  const ratingChanged = (newRating) => {
     setValue('courseRating', newRating)
   }
 
   const onSubmit = async (data) => {
-    await createRating(
+    await createRatingReviews(
       {
-        course: courseEntireData._id,
+        courseId: courseEntireData._id,
         rating: data.courseRating,
         review: data.courseExperience
       },
@@ -41,14 +42,14 @@ const CourseReviewModal = ({setReviewModal}) => {
   }
 
   return (
-    <>
+    <div className="text-richblack-5 z-30">
       <div>
         <div>
           <p>
             Add Review
           </p>
           <button
-            onClick={setReviewModal(false)}
+            onClick={() => setReviewModal(false)}
           >
             Close
           </button>
@@ -111,7 +112,7 @@ const CourseReviewModal = ({setReviewModal}) => {
           </form>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

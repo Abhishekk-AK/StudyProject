@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { categoryEndpoints, courseEndpoints } from "../apis";
+import { categoryEndpoints, courseEndpoints, ratingEndpoints } from "../apis";
 import { apiConnector } from "../apiConnector";
 
 const {
@@ -19,6 +19,10 @@ const {
     LECTURE_COMPLETION_API,
     GET_AUTHENTICATED_COURSE_DETAILS_API
 } = courseEndpoints
+
+const {
+    CREATE_RATING_REVIEWS_API
+} = ratingEndpoints
 
 export async function fetchCourseCategories() {
     let result = []
@@ -332,6 +336,32 @@ export async function markLectureAsComplete(data, token) {
         console.log('Mark lecture complete API error:', err)
         toast.error(`Couldn't marked as complete`)
         result = false
+    }
+    toast.dismiss(toastId)
+    return result
+}
+
+//create rating and reviews
+export async function createRatingReviews(data, token) {
+    let result = false
+    const toastId = toast.loading('Loading...')
+    try {
+        const response = await apiConnector('POST', CREATE_RATING_REVIEWS_API, data,
+            {
+                Authorization: `Bearer ${token}`
+            }
+        )
+        console.log('Create rating review response:', response)
+
+        if(!response.data.success)
+            throw new Error(response.data.error)
+
+        result = true
+        toast.success('Course reviewed successfully.')
+
+    } catch (err) {
+        console.error('Create rating review API error:', err)
+        toast.error(err.response.data.message ? err.response.data.message : 'Error in rating creation.')
     }
     toast.dismiss(toastId)
     return result
