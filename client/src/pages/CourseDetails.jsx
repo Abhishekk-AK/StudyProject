@@ -10,13 +10,14 @@ import { formatDate } from "../services/formatDate"
 import CourseDetailsCard from "../components/core/Course/CourseDetailsCard"
 import ConfirmationModal from "../components/common/ConfirmationModal"
 import SectionAccordion from "../components/core/Course/SectionAccordion"
+import { ACCOUNT_TYPE } from "../utils/constants"
+import toast from "react-hot-toast"
 
 const CourseDetails = () => {
 
   const {user} = useSelector((state) => state.profile)
   const {token} = useSelector((state) => state.auth)
   const {loading} = useSelector((state) => state.profile)
-  const {paymentLoading} = useSelector((state) => state.course)
   const {courseId} = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -73,7 +74,11 @@ const CourseDetails = () => {
   }
   
   const handleBuyCourse = () => {
-
+    if(user && user.accountType === ACCOUNT_TYPE.INSTRUCTOR) {
+      toast.error(`You are an instructor, you can't buy a course.`)
+      return
+    }
+    
     if(token) {
       buyCourse(token, [courseId], user, navigate, dispatch)
       return
@@ -110,14 +115,12 @@ const CourseDetails = () => {
     _id:course_id,
     courseName,
     courseDescription,
-    thumbnail,
     whatYouWillLearn,
     ratingAndReviews,
     instructor,
     studentsEnrolled,
     createdAt,
     courseContent,
-    price
   } = courseData?.courseDetails
 
   return (
