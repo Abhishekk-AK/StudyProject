@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
-import  ReactStars  from 'react-rating-stars-component'
-import { GiNinjaStar } from 'react-icons/gi'
 import { RiDeleteBin6Line } from 'react-icons/ri'
+import { removeFromCart } from '../../../../slices/CartSlice'
+import RatingStars from '../../../common/RatingStars'
 
 const RenderCartCourses = () => {
 
@@ -16,17 +16,12 @@ const RenderCartCourses = () => {
             <div>
               <img src={course?.thumbnail}/>
               <div>
-                <p>{course.courseName}</p>
-                <p>{course.category.name}</p>
-                <div>
-                  <span>4.8</span>
-                  <ReactStars
-                    count={5}
-                    size={20}
-                    edit={false}
-                    activeColor="#ffd700"
-                    emptyIcon={<GiNinjaStar/>}
-                    fullIcon={<GiNinjaStar/>}
+                <p>{course?.courseName}</p>
+                <p>{course?.category?.name}</p>
+                <div className='flex gap-2'>
+                  <span>{course?.rating}</span>
+                  <RatingStars
+                    Review_Count={course?.rating}
                   />
 
                   <span>
