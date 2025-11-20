@@ -330,7 +330,7 @@ exports.getInstructorCourses = async (req, res) => {
         }
 
         const instructorCourses = await User.findById(userId)
-                                    .populate('courses', 'courseName thumbnail price studentsEnrolled')
+                                    .populate('courses', 'courseName courseDescription thumbnail price studentsEnrolled')
 
         return res.status(200).json({
             data:instructorCourses,
