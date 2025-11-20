@@ -8,6 +8,7 @@ import TimeLine from '../components/core/HomePage/TimeLine'
 import LearningLanguage from '../components/core/HomePage/LearningLanguage'
 import InstructorSection from '../components/core/HomePage/InstructorSection'
 import ExploreMore from '../components/core/HomePage/ExploreMore'
+import ReviewSlider from '../components/common/ReviewSlider'
 
 
 const Home = () => {
@@ -209,7 +210,7 @@ const Home = () => {
         </h2>
 
         {/* Review slider */}
-
+        <ReviewSlider/>
 
       </div>
 

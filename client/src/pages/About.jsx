@@ -5,6 +5,7 @@ import FoundingStory from '../assets/Images/aic-home.jpg'
 import StatsComponent from '../components/core/AboutPage/StatsComponent'
 import LearningGrid from '../components/core/AboutPage/LearningGrid'
 import ContactForm from '../components/core/AboutPage/ContactForm'
+import ReviewSlider from '../components/common/ReviewSlider'
 
 const About = () => {
   return (
@@ -86,6 +87,7 @@ const About = () => {
       <section>
         <ContactForm/>
       </section>
+      <ReviewSlider/>
     </div>
   )
 }
