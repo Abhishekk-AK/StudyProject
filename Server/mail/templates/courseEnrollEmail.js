@@ -1,4 +1,4 @@
-exports.courseEnrollmentEmail = (courseName, name) => {
+exports.courseEnrollEmail = (courseName, name) => {
     return `<!DOCTYPE html>
     <html>
     
@@ -79,7 +79,7 @@ exports.courseEnrollmentEmail = (courseName, name) => {
                 <a class="cta" href="https://localhost:5173/dashboard">Go to Dashboard</a>
             </div>
             <div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
-                    href="mailto:info@studyproject.com">info@studynotion.com</a>. We are here to help!</div>
+                    href="mailto:info@studyproject.com">info@studyproject.com</a>. We are here to help!</div>
         </div>
     </body>
     
