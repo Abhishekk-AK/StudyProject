@@ -111,6 +111,78 @@ exports.createCourse = async (req, res) => {
 }
 
 
+//edit course
+exports.editCourse = async (req, res) => {
+    try {
+        const {courseID} = req.body;
+        const updates = req.body
+
+        if(!courseID) {
+            return res.status(400).json({
+                success:false,
+                message:'CourseId is required.'
+            })
+        }
+
+        const foundCourse = await Course.findById(courseID)
+
+        if(!foundCourse) {
+            return res.status(400).json({
+                success:false,
+                message:'Not a valid course.'
+            })
+        }
+
+        //check thumbnail image
+        if(req.files) {
+            const thumbnail = req.files.thumbnailImage
+            const thumbnailImage = await uploadImageToCloudinary(thumbnail, process.env.FOLDER_NAME)
+
+            foundCourse.thumbnail = thumbnailImage.secure_url
+        }
+
+        //update edited fields
+        for(const key in updates) {
+            if(updates.hasOwnProperty(key)) {
+                if(key === 'tag' || key === 'instructions')
+                    foundCourse[key] = JSON.parse(updates[key])
+                else
+                    foundCourse[key] = updates[key]
+            }
+        }
+        await foundCourse.save()
+
+        const updatedCourse = await Course.findOne({_id:courseID})
+                                    .populate(
+                                        {
+                                            path:'instructor',
+                                        }
+                                    )
+                                    .populate('category')
+                                    .populate('ratingAndReviews')
+                                    .populate({
+                                        path:'courseContent',
+                                        populate:{
+                                            path:'subSection'
+                                        }
+                                    })
+
+        return res.status(200).json({
+            data:updatedCourse,
+            success:true,
+            message:'Course updated Successfully.'
+        })
+
+    } catch (err) {
+        console.error(err);
+        return res.status.json({
+            success:false,
+            message:'Something went wrong while editing the course.'
+        })
+    }
+}
+
+
 //get all coursess
 exports.showAllCourses = async (req, res) => {
     try {
