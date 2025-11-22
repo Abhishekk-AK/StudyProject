@@ -17,7 +17,8 @@ export const profileEndpoints = {
 
 //settings
 export const settingsEndpoints = {
-    EDIT_PROFILE_API: BASE_URL + '/profile/update'
+    EDIT_PROFILE_API: BASE_URL + '/profile/update',
+    UPDATE_PROFILE_PIC_API: BASE_URL + '/profile/update/picture'
 }
 
 //contactUs
