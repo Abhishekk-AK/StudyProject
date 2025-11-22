@@ -1,6 +1,7 @@
 const Profile = require('../models/Profile');
 const User = require('../models/User');
 const Course = require('../models/Course');
+const { uploadImageToCloudinary } = require('../utils/imageUploader');
 
 exports.updateProfile = async (req, res) => {
     try {
@@ -84,6 +85,39 @@ exports.getAllUserDetails = async (req, res) => {
     }
 }
 
+//update profile pic
+exports.updateProfilePicture = async (req, res) => {
+    try {
+        const profilePicture = req.files.profilePicture
+        const userId = req.user.id
+
+        const image = await uploadImageToCloudinary(
+                                                    profilePicture,
+                                                    process.env.FOLDER_NAME,
+                                                    1000,
+                                                    1000
+                                                )
+
+        const updatedPicture = await User.findByIdAndUpdate(
+            userId,
+            {image:image?.secure_url},
+            {new:true}
+        )
+
+        res.send({
+            data:updatedPicture,
+            success:true,
+            message:'Profile Pic updated.'
+        })
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success:false,
+            message:`Couldn't update profile pic.`
+        })
+    }
+}
 
 //delete account
 exports.deleteAccount = async (req, res) => {
