@@ -1,5 +1,6 @@
 const Profile = require('../models/Profile');
 const User = require('../models/User');
+const Course = require('../models/Course');
 
 exports.updateProfile = async (req, res) => {
     try {
@@ -103,6 +104,17 @@ exports.deleteAccount = async (req, res) => {
         await Profile.findByIdAndDelete({_id:userDetails.additionalDetails});
 
         //unenroll user from all courses
+        for(const courseId of userDetails?.courses) {
+            await Course.findByIdAndUpdate(
+                courseId,
+                {
+                    $pull:{
+                        studentsEnrolled: id
+                    }
+                },
+                {new:true}
+            )
+        }
 
         //delete user
         await User.findByIdAndDelete({_id:id});
