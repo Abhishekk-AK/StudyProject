@@ -15,6 +15,11 @@ export const profileEndpoints = {
     GET_USER_ENROLLED_COURSES_API: BASE_URL + '/profile/enrolled-courses'
 }
 
+//settings
+export const settingsEndpoints = {
+    EDIT_PROFILE_API: BASE_URL + '/profile/update'
+}
+
 //contactUs
 export const contactUsEndpoint = {
     CONTACT_US_API: BASE_URL + '/common/submit-contact-form'

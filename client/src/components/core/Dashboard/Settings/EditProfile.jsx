@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
 import IconBtn from "../../../common/IconBtn"
 import { useNavigate } from "react-router-dom"
+import { updateProfile } from "../../../../services/operations/settingsApi"
 
 const EditProfile = () => {
 
@@ -12,6 +13,7 @@ const EditProfile = () => {
   const {register, handleSubmit, formState:{errors}} = useForm()
 
   const genders = ['Select', 'Male', 'Female', 'Others']
+
   const submitProfileForm = async (data) => {
     try {
       dispatch(updateProfile(data, token))
@@ -87,7 +89,6 @@ const EditProfile = () => {
               id="dateOfBirth"
               name="dateOfBirth"
               type="date"
-              //placeholder="dd/mm/yy"
               {...register('dateOfBirth', {
                 required:{
                   value:false,
@@ -120,7 +121,7 @@ const EditProfile = () => {
               name="gender"
               type="text"
               {...register('gender', {required:false})}
-              defaultValue={user?.additionalDetails?.dateOfBirth}
+              defaultValue={user?.additionalDetails?.gender}
             >
               {
                 genders.map((ele, i) => (
