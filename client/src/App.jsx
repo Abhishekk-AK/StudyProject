@@ -23,6 +23,7 @@ import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import { useSelector } from "react-redux";
 import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor";
 import MyCourses from "./components/core/Dashboard/MyCourses";
+import Settings from "./components/core/Dashboard/Settings";
 
 
 function App() {
@@ -88,6 +89,7 @@ function App() {
           }
         >
          <Route path="dashboard/my-profile" element={<MyProfile/>} /> 
+         <Route path="dashboard/settings" element={<Settings/>} />
          
          {
           user?.accountType === ACCOUNT_TYPE.STUDENT && (
