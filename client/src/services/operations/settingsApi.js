@@ -52,7 +52,7 @@ export function updateProfilePicture(data, token) {
             if(!response.data.success)
                 throw new Error(response.data.message)
 
-            dispatch(setUser(...response.data.data))
+            dispatch(setUser(response.data.data))
             
             toast.success('Profile Picture updated.')
 

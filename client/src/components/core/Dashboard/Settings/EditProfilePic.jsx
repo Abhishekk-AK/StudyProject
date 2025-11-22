@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { MdOutlineFileUpload } from "react-icons/md";
 import IconBtn from "../../../common/IconBtn";
 import { useRef, useState } from "react";
+import { updateProfilePicture } from "../../../../services/operations/settingsApi";
 
 const EditProfilePic = () => {
 
@@ -72,7 +73,7 @@ const EditProfilePic = () => {
               />
               <button
                 disabled={loading}
-                onclick={handleSelect}
+                onClick={handleSelect}
                 className="bg-richblack-700 cursor-pointer rounded-md text-richblack-50 "
               >
                 Select
