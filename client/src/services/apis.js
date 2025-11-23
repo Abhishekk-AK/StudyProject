@@ -19,7 +19,7 @@ export const profileEndpoints = {
 export const settingsEndpoints = {
     EDIT_PROFILE_API: BASE_URL + '/profile/update',
     UPDATE_PROFILE_PIC_API: BASE_URL + '/profile/update/picture',
-    CHANGE_PASSWORD_API: BASE_URL + 'auth/password-change',
+    CHANGE_PASSWORD_API: BASE_URL + '/auth/password-change',
     DELETE_ACCOUNT_API: BASE_URL + '/profile/delete'
 }
 

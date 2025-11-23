@@ -5,6 +5,7 @@ const otpGenerator = require('otp-generator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mailSender = require('../utils/mailSender');
+const {passwordUpdate} = require('../mail/templates/passwordUpdate');
 
 
 //send OTP
@@ -252,7 +253,7 @@ exports.changePassword = async (req, res) => {
         }
 
         //get password from DB
-        const user = await User.findOne(userId);
+        const user = await User.findOne({_id:userId});
         if(!user) {
             return res.status(410).json({
                 success:false,
@@ -260,7 +261,16 @@ exports.changePassword = async (req, res) => {
             })
         }
 
-        const changedPassword = currentPassword;
+        //match current pass with stored pass
+        const isPassMatch = await bcrypt.compare(currentPassword, user.password)
+        if(!isPassMatch) {
+            return res.status(401).json({
+                success:false,
+                message:'Please enter correct current password.'
+            })
+        }
+
+        const changedPassword = newPassword;
         const oldPassword = user.password;
 
         //validation
@@ -288,7 +298,6 @@ exports.changePassword = async (req, res) => {
                 user.email,
                 user.firstName
             )
-
         );
 
         //return response

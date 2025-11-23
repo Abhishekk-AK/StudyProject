@@ -4,6 +4,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import { useSelector } from "react-redux"
 import IconBtn from "../../../common/IconBtn"
 import { useNavigate } from "react-router-dom"
+import { changePassword } from "../../../../services/operations/settingsApi"
 
 const ChangePassword = () => {
 
@@ -17,7 +18,7 @@ const ChangePassword = () => {
     try {
       await changePassword(data, token)
     } catch (err) {
-      console.error('Update password error:', err.message)
+      console.error('Change password error:', err.message)
     }
   }
 

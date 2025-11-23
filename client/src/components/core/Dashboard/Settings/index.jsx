@@ -1,7 +1,7 @@
 import DeleteAccount from "./DeleteAccount"
 import EditProfile from "./EditProfile"
 import EditProfilePic from "./EditProfilePic"
-import UpdatePassword from "./UpdatePassword"
+import ChangePassword from "./ChangePassword"
 
 const Settings = () => {
   return (
@@ -14,7 +14,7 @@ const Settings = () => {
       </h2>
       <EditProfilePic/>
       <EditProfile/>
-      <UpdatePassword/>
+      <ChangePassword/>
       <DeleteAccount/>
     </div>
   )
