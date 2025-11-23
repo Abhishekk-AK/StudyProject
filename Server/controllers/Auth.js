@@ -182,7 +182,7 @@ exports.login = async (req,res) => {
         }
 
         //check registered user
-        let user = await User.findOne({email}).lean();
+        let user = await User.findOne({email}).lean().populate('additionalDetails');
         if(!user) {
             return res.status(401).json({
                 success:false,
@@ -241,24 +241,18 @@ exports.login = async (req,res) => {
 exports.changePassword = async (req, res) => {
     try {
         //get data from req body
-        const {email, password, confirmPassword} = req.body;
+        const userId = req.user.id;
+        const {currentPassword, newPassword} = req.body;
 
-        if(!password || !confirmPassword) {
+        if(!currentPassword || !newPassword) {
             return res.status(403).json({
                 success:false,
                 message:'All fields are required.'
             })
         }
 
-        if(password !== confirmPassword) {
-            return res.status(400).json({
-                success:false,
-                message:'Passwords do not match, please enter same password in both fields.'
-            })
-        }
-
-        //get oldPassword, newPassword, confirmPassword
-        const user = await User.findOne({email});
+        //get password from DB
+        const user = await User.findOne(userId);
         if(!user) {
             return res.status(410).json({
                 success:false,
@@ -266,11 +260,11 @@ exports.changePassword = async (req, res) => {
             })
         }
 
-        const newPassword = password;
+        const changedPassword = currentPassword;
         const oldPassword = user.password;
 
         //validation
-        if(await bcrypt.compare(newPassword, oldPassword)) {
+        if(await bcrypt.compare(changedPassword, oldPassword)) {
             return res.status(400).json({
                 success:false,
                 message:'You have entered the existed password, please enter different new password.'
@@ -281,14 +275,21 @@ exports.changePassword = async (req, res) => {
 
         //update password in DB
         await User.findOneAndUpdate(
-            {email},
+            {_id:userId},
             {password:hashedPassword},
             {new:true}
         )
 
         //send mail Password Updated
-        await mailSender(email, "Password change update.", `<p>Password has been changed successfully.</p>
-                                                            <p>Now you can login with new password.</p>`);
+        await mailSender(
+            user.email, 
+            "Password change update.",
+            passwordUpdate(
+                user.email,
+                user.firstName
+            )
+
+        );
 
         //return response
         return res.status(200).json({
