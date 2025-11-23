@@ -7,6 +7,7 @@ const {
     EDIT_PROFILE_API,
     UPDATE_PROFILE_PIC_API,
     CHANGE_PASSWORD_API,
+    DELETE_ACCOUNT_API
 } = settingsEndpoints
 
 export function updateProfile(data, token) {
@@ -79,10 +80,36 @@ export async function changePassword(data, token) {
             throw new Error(response.data.message)
 
         toast.success('Password changed successfully.')
-        
+
     } catch (err) {
         console.error('Change password API error:', err)
         toast.error(`Couldn't change Password.`)
     }
     toast.dismiss(toastId)
+}
+
+export function deleteAccount(token, navigate) {
+
+    return async (dispatch) => {
+        const toastId = toast.loading('Loading...')
+        try {
+            const response = await apiConnector('PUT', DELETE_ACCOUNT_API, 
+                {
+                    Authorization:`Bearer ${token}`
+                }
+            )
+            console.log('Delete Account response:', response)
+
+            if(!response.data.success)
+                throw new Error(response.data.message)
+
+            toast.success('Account Deleted Successfully.')
+            navigate('/')
+            
+        } catch (err) {
+            console.error('Delete Account API error:', err)
+            toast.error(`Couldn't delete Account.`)
+        }
+        toast.dismiss(toastId)
+    }
 }
