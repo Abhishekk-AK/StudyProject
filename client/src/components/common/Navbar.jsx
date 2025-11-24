@@ -1,5 +1,5 @@
 import { Link, matchPath, useLocation } from 'react-router-dom'
-import Logo from '../../assets/TimelineLogo/Logo1.svg'
+import Logo from '../../assets/TimeLineLogo/Logo1.svg'
 import { NavbarLinks } from '../../data/navbar-links'
 import { useSelector } from 'react-redux'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
