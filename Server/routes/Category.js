@@ -15,7 +15,7 @@ router.get('/detail', categoryPageDetails);
 router.get('/all', showAllCategorys);
 
 router.post('/course/create', auth, isInstructor, createCourse);
-router.put('/course/edit', auth, isInstructor, editCourse);
+router.put('/course/update', auth, isInstructor, editCourse);
 router.get('/course/detail', getCourseDetails);
 router.get('/course/all', showAllCourses);
 

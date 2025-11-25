@@ -114,17 +114,17 @@ exports.createCourse = async (req, res) => {
 //edit course
 exports.editCourse = async (req, res) => {
     try {
-        const {courseID} = req.body;
+        const {courseId} = req.body;
         const updates = req.body
 
-        if(!courseID) {
+        if(!courseId) {
             return res.status(400).json({
                 success:false,
                 message:'CourseId is required.'
             })
         }
 
-        const foundCourse = await Course.findById(courseID)
+        const foundCourse = await Course.findById(courseId)
 
         if(!foundCourse) {
             return res.status(400).json({
@@ -143,7 +143,7 @@ exports.editCourse = async (req, res) => {
 
         //update edited fields
         for(const key in updates) {
-            if(updates.hasOwnProperty(key)) {
+            if(Object.prototype.hasOwnProperty.call(updates, key)) {
                 if(key === 'tag' || key === 'instructions')
                     foundCourse[key] = JSON.parse(updates[key])
                 else
@@ -152,7 +152,7 @@ exports.editCourse = async (req, res) => {
         }
         await foundCourse.save()
 
-        const updatedCourse = await Course.findOne({_id:courseID})
+        const updatedCourse = await Course.findOne({_id:courseId})
                                     .populate(
                                         {
                                             path:'instructor',
@@ -175,7 +175,7 @@ exports.editCourse = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        return res.status.json({
+        return res.status(500).json({
             success:false,
             message:'Something went wrong while editing the course.'
         })

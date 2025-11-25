@@ -80,9 +80,8 @@ export async function editCourseDetails(data, token) {
     let result = null
     const toastId = toast.loading('Loading...')
     try {
-        const response = await apiConnector('POST', EDITCOURSE_API, data,
+        const response = await apiConnector('PUT', EDITCOURSE_API, data,
             {
-                'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${token}`
             }
         )

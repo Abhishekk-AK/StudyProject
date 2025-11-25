@@ -58,6 +58,7 @@ const CourseInfoForm = () => {
 
     //check whether form is updaed or not
     const isFormUpdated = () => {
+        const currentValues = getValues()
         if(
             currentValues.courseTitle !== course.courseName 
             || currentValues.courseDesc !== course.courseDescription
