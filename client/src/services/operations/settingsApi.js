@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import { settingsEndpoints } from "../apis";
 import { apiConnector } from "../apiConnector";
 import { setUser } from "../../slices/ProfileSlice";
+import { logout } from './authApi';
 
 const {
     EDIT_PROFILE_API,
@@ -93,7 +94,7 @@ export function deleteAccount(token, navigate) {
     return async (dispatch) => {
         const toastId = toast.loading('Loading...')
         try {
-            const response = await apiConnector('PUT', DELETE_ACCOUNT_API, 
+            const response = await apiConnector('DELETE', DELETE_ACCOUNT_API, {},
                 {
                     Authorization:`Bearer ${token}`
                 }
@@ -104,7 +105,7 @@ export function deleteAccount(token, navigate) {
                 throw new Error(response.data.message)
 
             toast.success('Account Deleted Successfully.')
-            navigate('/')
+            dispatch(logout(navigate))
             
         } catch (err) {
             console.error('Delete Account API error:', err)
