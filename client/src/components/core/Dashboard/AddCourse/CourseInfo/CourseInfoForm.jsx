@@ -49,7 +49,7 @@ const CourseInfoForm = () => {
             setValue('courseBenefits', course.whatYouWillLearn)
             setValue('courseCategory', course.category)
             setValue('courseRequirements', course.instructions)
-            setValue('courseImage', course.thumbnailImage)
+            setValue('courseImage', course.thumbnail)
         }
 
         getCategories()
@@ -63,11 +63,11 @@ const CourseInfoForm = () => {
             currentValues.courseTitle !== course.courseName 
             || currentValues.courseDesc !== course.courseDescription
             || currentValues.coursePrice !== course.price
-            || currentValues.courseTags.toString() !== course.tag
+            || currentValues.courseTags.toString() !== course.tag.toString()
             || currentValues.courseBenefits !== course.whatYouWillLearn
             || currentValues.courseCategory._id !== course.category._id
             || currentValues.courseRequirements.toString() !== course.instructions.toString()
-            || currentValues.courseImage !== course.thumbnailImage
+            || currentValues.courseImage !== course.thumbnail
         ) {
             return true
         }
@@ -105,7 +105,7 @@ const CourseInfoForm = () => {
                 if(currentValues.courseRequirements.toString() !== course.instructions.toString())
                     formData.append('instructions', JSON.stringify(data.courseRequirements))
 
-                if(currentValues.courseImage !== course.thumbnailImage)
+                if(currentValues.courseImage !== course.thumbnail)
                     formData.append('thumbnailImage', data.courseImage)
 
                 setLoading(true)
@@ -255,13 +255,13 @@ const CourseInfoForm = () => {
 
         <div>
             <Upload
-                label="Course Thumbnail"
+                label="CourseThumbnail"
                 name="courseImage"
                 placeholder="Drag and drop an image"
                 register={register}
                 setValue={setValue}
                 errors={errors} 
-                editData={editCourse ? course?.thumbnailImage : null}
+                editData={editCourse ? course?.thumbnail : null}
             />
         </div>
 

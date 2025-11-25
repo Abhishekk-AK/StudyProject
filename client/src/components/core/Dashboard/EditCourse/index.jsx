@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom";
 import { getFullDetailsCourse } from "../../../../services/operations/courseApi";
 import { setCourse, setEditCourse } from "../../../../slices/CourseSlice";
+import RenderSteps from "../AddCourse/RenderSteps";
 
 const EditCourse = () => {
 
@@ -20,6 +21,7 @@ const EditCourse = () => {
                 dispatch(setEditCourse(true))
                 dispatch(setCourse(result?.courseDetails))
             }
+            setLoading(false)
         })()
     },[])
 
