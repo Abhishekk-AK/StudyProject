@@ -4,6 +4,8 @@ const User = require('../models/User');
 const CourseProgress = require('../models/CourseProgress')
 const {uploadImageToCloudinary} = require('../utils/imageUploader');
 const { convertSecondsToDuration } = require('../utils/secondsToDuration');
+const Section = require('../models/Section');
+const SubSection = require('../models/Subsection');
 
 //createCourse handler function
 exports.createCourse = async (req, res) => {
@@ -182,6 +184,101 @@ exports.editCourse = async (req, res) => {
         return res.status(500).json({
             success:false,
             message:'Something went wrong while editing the course.'
+        })
+    }
+}
+
+
+//delete course
+exports.deleteCourse = async (req, res) => {
+    try {
+        const {courseId, categoryId} = req.body
+
+        if(!courseId) {
+            return res.status(400).json({
+                success:false,
+                message:'CourseId is required.'
+            })
+        }
+
+        const course = await Course.findById(courseId)
+
+        if(!course) {
+            return res.status(404).json({
+                success:false,
+                message:'Course not found.'
+            })
+        }
+
+        //unenroll students
+        const studentsEnrolled = course.studentsEnrolled
+        for( const studentId of studentsEnrolled ) {
+            await User.findByIdAndUpdate(
+                studentId,
+                {
+                    $pull: {
+                        courses: courseId
+                    }
+                }
+            )
+        }
+
+        //delete section and subsection
+
+        // const sectionIds = course.courseContent
+        // for( const sectionId of sectionIds ) {
+
+        //     const section = await Section.findById(sectionId)
+        //     if(section) {
+        //         await Subsection.deleteMany({ _id: { $in: section.subSection } })
+        //     }
+        //     await Section.findByIdAndDelete(sectionId)
+        // }
+
+        const sectionIds = course.courseContent
+
+        const sections = await Section.find({ _id: { $in:sectionIds } })
+        const subsectionIds = sections.flatMap(sec => sec.subSection)
+
+        if( subsectionIds.length > 0 ) {
+            await SubSection.deleteMany({ _id : { $in: subsectionIds } })
+        }
+
+        if( sectionIds.length > 0 ) {
+            await Section.deleteMany({ _id: { $in: sectionIds } })
+        }
+
+        //update the category
+        await Category.findByIdAndUpdate(
+            categoryId,
+            {
+                $pull:{
+                    courses: courseId
+                }
+            },
+            {new:true}
+        )
+
+        //delete course
+        const deletedCourse = await Course.findByIdAndDelete(courseId)
+
+        if(!deletedCourse) {
+            return res.status(400).json({
+                success:false,
+                message:'Course not deleted.'
+            })
+        }
+
+        return res.status(200).json({
+            success:true,
+            message:'Course deleted Successfully.'
+        })
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            success:false,
+            message:'Something went wrong while deleting course.'
         })
     }
 }
