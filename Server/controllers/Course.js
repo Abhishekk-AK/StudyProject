@@ -192,7 +192,7 @@ exports.editCourse = async (req, res) => {
 //delete course
 exports.deleteCourse = async (req, res) => {
     try {
-        const {courseId, categoryId} = req.body
+        const {courseId} = req.body
 
         if(!courseId) {
             return res.status(400).json({
@@ -248,6 +248,7 @@ exports.deleteCourse = async (req, res) => {
             await Section.deleteMany({ _id: { $in: sectionIds } })
         }
 
+        const categoryId = course?.category
         //update the category
         await Category.findByIdAndUpdate(
             categoryId,

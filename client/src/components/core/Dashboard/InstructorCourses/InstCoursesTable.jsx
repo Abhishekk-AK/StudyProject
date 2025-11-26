@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import { fetchInstructorCourses } from '../../../../services/operations/courseApi'
+import { deleteCourse, fetchInstructorCourses } from '../../../../services/operations/courseApi'
 import { formatDate } from '../../../../services/formatDate'
 import { COURSE_STATUS } from '../../../../utils/constants'
 import { HiClock } from 'react-icons/hi'
@@ -21,11 +21,14 @@ const InstCoursesTable = ({courses, setCourses}) => {
     const TRUNCATE_LENGTH = 30
 
     const handleCourseDelete = async (courseId) => {
+        console.log('first')
         setLoading(true)
+        console.log('first')
         await deleteCourse({courseId:courseId}, token)
         const result = await fetchInstructorCourses(token)
-        if(result)
+        if(result) {
             setCourses(result?.courses)
+        }
         setConfirmationModal(null)
         setLoading(false)
     }
