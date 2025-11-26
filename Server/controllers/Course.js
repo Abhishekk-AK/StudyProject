@@ -262,8 +262,10 @@ exports.getCourseDetails = async (req, res) => {
                                             .populate("category", "name")
                                             .populate({
                                                 path:"courseContent",
+                                                select:"-_id",
                                                 populate:{
-                                                    path:"subSection"
+                                                    path:"subSection",
+                                                    select:"title -_id"
                                                 }
                                             });
 
@@ -409,7 +411,7 @@ exports.getInstructorCourses = async (req, res) => {
         }
 
         const instructorCourses = await User.findById(userId)
-                                    .populate('courses', 'courseName courseDescription thumbnail price studentsEnrolled status')
+                                    .populate('courses', 'courseName courseDescription thumbnail price studentsEnrolled status createdAt')
 
         return res.status(200).json({
             data:instructorCourses,
