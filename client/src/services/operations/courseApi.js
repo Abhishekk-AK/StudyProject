@@ -9,6 +9,7 @@ const {
 const {
     ADDCOURSE_API,
     EDITCOURSE_API,
+    DELETECOURSE_API,
     COURSE_DETAILS_API,
     CREATE_SECTION_API,
     UPDATE_SECTION_API,
@@ -101,6 +102,29 @@ export async function editCourseDetails(data, token) {
     }
     toast.dismiss(toastId)
     return result
+}
+
+export async function deleteCourse(courseId, token) {
+    const toastId = toast.loading('Loading...')
+    try {
+        const response = await apiConnector('DELETE', DELETECOURSE_API, courseId,
+            {
+                Authorization: `Bearer ${token}`
+            }
+        )  
+
+        console.log('Delete course response:', response)
+
+        if(!response.data.success) 
+            throw new Error(response.data.message)
+
+        toast.success('Course Deleted.')
+        
+    } catch (err) {
+       console.log('Course delete API error:', err)
+       toast.error(err.message) 
+    }
+    toast.dismiss(toastId)
 }
 
 export async function fetchCourseDetails(courseId) {
