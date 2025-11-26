@@ -101,6 +101,7 @@ const RenderSteps = () => {
       {step === 1 && <CourseInfoForm/>  }
       {step === 2 && <CourseBuilderForm/> }
       {step === 3 && <PublishCourse/> }
+      {step === 4 && <PublishCourse/> }
     </>
   )
 }
