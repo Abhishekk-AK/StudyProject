@@ -9,7 +9,7 @@ const { convertSecondsToDuration } = require('../utils/secondsToDuration');
 exports.createCourse = async (req, res) => {
     try {
         //fetch data
-        const {courseName, courseDescription, whatYouWillLearn, price , category, tag, instructions} = req.body;
+        const {courseName, courseDescription, whatYouWillLearn, price , category, tag, instructions, status} = req.body;
 
         //get thumbnail from temp local server temporarily stored by cloudinary
         const thumbnail = req.files.thumbnailImage;
@@ -27,6 +27,9 @@ exports.createCourse = async (req, res) => {
                 message:'All fields are required.'
             })
         }
+
+        if(!status || status === undefined)
+            status = 'Draft'
 
         //check for instructor to store in DB
         //res.user.id = we take id from payload during auth
@@ -66,7 +69,8 @@ exports.createCourse = async (req, res) => {
             category: categoryDetails._id,
             thumbnail: thumbnailImage.secure_url,
             tag: tag,
-            instructions: instructions
+            instructions: instructions,
+            status: status
         })
 
         //add new course to the userschema of instructor
@@ -186,14 +190,17 @@ exports.editCourse = async (req, res) => {
 //get all coursess
 exports.showAllCourses = async (req, res) => {
     try {
-        const allCourses = await Course.find({}, {courseName:true, 
-                                                    price:true,
-                                                    thumbnail:true, 
-                                                    instructor:true,
-                                                    ratingAndReviews:true, 
-                                                    studentsEnrolled:true
-                                                })
-                                                .populate("instructor", "firstName lastName image");
+        const allCourses = await Course.find(
+                                            {status:'Published'}, 
+                                            {   
+                                                courseName:true, 
+                                                price:true,
+                                                thumbnail:true, 
+                                                instructor:true,
+                                                ratingAndReviews:true, 
+                                                studentsEnrolled:true
+                                            })
+                                            .populate("instructor", "firstName lastName image");
 
         //if no course found
         if(allCourses.length === 0) {
@@ -402,7 +409,7 @@ exports.getInstructorCourses = async (req, res) => {
         }
 
         const instructorCourses = await User.findById(userId)
-                                    .populate('courses', 'courseName courseDescription thumbnail price studentsEnrolled')
+                                    .populate('courses', 'courseName courseDescription thumbnail price studentsEnrolled status')
 
         return res.status(200).json({
             data:instructorCourses,
