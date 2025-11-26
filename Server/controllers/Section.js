@@ -28,7 +28,12 @@ exports.createSection = async (req, res) => {
                                                     },
                                                     {new:true}
                                                 )
-                                                .populate("courseContent")
+                                                .populate({
+                                                    path:"courseContent",
+                                                    populate:{
+                                                        path:"subSection"
+                                                    }
+                                                })
 
         //return response
         return res.status(200).json({
@@ -82,7 +87,12 @@ exports.updateSection = async (req, res) => {
         }
 
         const updatedCourse = await Course.findById(courseId)
-                                            .populate("courseContent")      
+                                                    .populate({
+                                                        path:"courseContent",
+                                                        populate:{
+                                                            path:"subSection"
+                                                        }
+                                                    })      
 
         return res.status(200).json({
             success:true,
@@ -142,7 +152,12 @@ exports.deleteSection = async (req, res) => {
         await Section.findByIdAndDelete(sectionId);
 
         const updatedCourse = await Course.findById(courseId)
-                                            .populate("courseContent")
+                                                    .populate({
+                                                        path:"courseContent",
+                                                        populate:{
+                                                            path:"subSection"
+                                                        }
+                                                    })
 
         //return response
         return res.status(200).json({
